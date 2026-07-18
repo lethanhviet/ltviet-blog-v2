@@ -15,6 +15,9 @@ import "@/styles/icon-button.css"
 import "@/styles/bar.css"
 import "@/styles/shape.css"
 
+import Analytics from "@vercel/analytics/astro"
+import SpeedInsights from "@vercel/speed-insights/astro"
+
 import Footer from "@/components/Footer.astro"
 import MetaHead from "@/components/MetaHead.astro"
 import Sidebar from "@/components/Sidebar.astro"
@@ -37,6 +40,8 @@ import { SITE } from "@/consts"
         <page-footer><Footer /></page-footer>
       </page-content>
     </page-grid>
+    <Analytics />
+    <SpeedInsights />
   </body>
 </html>
 
