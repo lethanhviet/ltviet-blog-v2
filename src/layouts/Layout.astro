@@ -19,10 +19,6 @@ import Footer from "@/components/Footer.astro"
 import MetaHead from "@/components/MetaHead.astro"
 import Sidebar from "@/components/Sidebar.astro"
 import { SITE } from "@/consts"
-
-type Props = { crumbs?: { label: string; href: string }[] }
-
-const { crumbs } = Astro.props
 ---
 
 <html lang={SITE.locale} dir={SITE.dir}>
@@ -33,13 +29,8 @@ const { crumbs } = Astro.props
     <page-grid>
       <page-header>
         <page-nav>
-          <Sidebar crumbs={crumbs}
-            ><slot name="actions" slot="actions" /></Sidebar
-          >
+          <Sidebar><slot name="actions" slot="actions" /></Sidebar>
         </page-nav>
-        {Astro.slots.has("toc") && (
-            <page-toc><slot name="toc" /></page-toc>
-          )}
       </page-header>
       <page-content>
         <main><slot /></main>
@@ -97,24 +88,10 @@ const { crumbs } = Astro.props
     }
   }
 
-  page-toc {
-    display: block;
-    min-width: 0;
-    grid-column: 10 / 13;
-    grid-row: 1;
-
-    @media screen and (width >= 64rem) {
-      position: fixed;
-      inset-block: var(--page-offset-top) var(--page-offset-bottom);
-      inset-inline-end: var(--grid-edge);
-      width: calc(3 * var(--grid-column-width) + 2 * var(--grid-gutter));
-    }
-  }
-
   page-content {
     display: flex;
     flex-direction: column;
-    grid-column: 3 / 10;
+    grid-column: 3 / 13;
     grid-row: 1;
     min-width: 0;
     margin-block-start: -0.1em;

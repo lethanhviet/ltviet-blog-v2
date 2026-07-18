@@ -1,6 +1,5 @@
 ---
-import SocialIcons from "@/components/SocialIcons.astro"
-import { SITE, SOCIALS } from "@/consts"
+import { SITE } from "@/consts"
 ---
 
 <footer>
@@ -8,20 +7,13 @@ import { SITE, SOCIALS } from "@/consts"
     &copy; {new Date().getFullYear()}
     {SITE.title}
   </p>
-  <SocialIcons links={SOCIALS} />
 </footer>
 
 <style>
   footer {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
     margin-block: var(--space-xs) var(--page-offset-bottom);
-
-    @media (width >= 40rem) {
-      flex-direction: row;
-      justify-content: space-between;
-    }
 
     p {
       font-size: var(--step--1);

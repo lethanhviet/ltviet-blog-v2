@@ -3,7 +3,6 @@ import MetaPost from "@/components/MetaPost.astro"
 import PostActions from "@/components/PostActions.astro"
 import ScrollToTop from "@/components/ScrollToTop.astro"
 import SeriesReader from "@/components/SeriesReader.astro"
-import TableOfContents from "@/components/TableOfContents.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts, getSubposts, pageTitle } from "@/lib/content"
 import { formatDate, isSubpost, subpostSlug } from "@/lib/utils"
@@ -39,36 +38,14 @@ const rendered = await Promise.all(
   })),
 )
 
-const sections = rendered.map(({ entry, headings }, i) => ({
-  id: i === 0 ? undefined : subpostSlug(entry.id),
-  label: entry.data.title,
-  open: entry.id === post.id,
-  headings: headings.filter(
-    ({ depth, text }) => depth >= 2 && depth <= 4 && text.trim(),
-  ),
-}))
-const hasToc =
-  sections.length > 1 || sections.some(({ headings }) => headings.length > 0)
-
-const crumbs = [{ label: parent.data.title, href: `/blog/${parent.id}` }]
-if (isSubpost(post.id)) {
-  crumbs.push({ label: post.data.title, href: `/blog/${post.id}` })
-}
 ---
 
-<Layout crumbs={crumbs}>
+<Layout>
   <MetaPost
     slot="head"
     post={post}
     canonical={isSubpost(post.id) ? `/blog/${parent.id}` : undefined}
   />
-  {hasToc && (
-      <TableOfContents
-        slot="toc"
-        title={parent.data.title}
-        sections={sections}
-      />
-    )}
   <PostActions slot="actions" prev={prev} next={next} />
   <ScrollToTop floating />
   {rendered.map(({ entry, Content, authors }, i) => (

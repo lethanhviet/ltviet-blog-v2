@@ -5,7 +5,8 @@
       "name": "ltviet-blog-v2",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 4321
+      "port": 4321,
+      "autoPort": true
     }
   ]
 }
