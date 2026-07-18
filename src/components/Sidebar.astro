@@ -1,5 +1,4 @@
 ---
-import ExternalIcon from "@/assets/icons/external.svg"
 import Logo from "@/assets/logo.svg"
 import ThemeToggle from "@/components/ThemeToggle.astro"
 import { NAV_GROUPS, SITE } from "@/consts"
@@ -29,15 +28,9 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
                     }
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    data-key={item.key}
                   >
                     <item.icon aria-hidden="true" />
                     <span>{item.label}</span>
-                    {item.external ? (
-                      <ExternalIcon aria-hidden="true" data-external />
-                    ) : (
-                      <kbd>{item.key}</kbd>
-                    )}
                   </a>
                 </li>
               ))}
@@ -142,6 +135,16 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     }
   }
 
+  nav ul:has(li[data-group-label]) {
+    a {
+      font-size: var(--step--1);
+    }
+
+    @media (width < 64rem) {
+      display: none;
+    }
+  }
+
   li[data-group-label] {
     padding-inline: var(--space-2xs);
     margin-block-end: var(--space-3xs);
@@ -176,21 +179,6 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
       min-width: 0;
     }
 
-    kbd {
-      flex-shrink: 0;
-      font: inherit;
-      font-size: var(--step--2);
-      color: var(--muted-foreground);
-      opacity: 0.6;
-    }
-
-    svg[data-external] {
-      flex-shrink: 0;
-      inline-size: 0.875em;
-      block-size: 0.875em;
-      opacity: 0.6;
-    }
-
     &:hover,
     &[aria-current="page"] {
       color: var(--foreground);
@@ -200,12 +188,7 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     @media (width < 64rem) {
       padding: var(--space-3xs);
 
-      > span,
-      kbd {
-        display: none;
-      }
-
-      svg[data-external] {
+      > span {
         display: none;
       }
     }
@@ -222,29 +205,3 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     }
   }
 </style>
-
-<script>
-  ;(() => {
-    const links = document.querySelectorAll<HTMLAnchorElement>(
-      "aside nav a[data-key]",
-    )
-    const byKey = new Map<string, HTMLAnchorElement>()
-    for (const link of links) {
-      const key = link.dataset.key
-      if (key) byKey.set(key, link)
-    }
-
-    addEventListener("keydown", (event) => {
-      if (event.defaultPrevented) return
-      if (event.metaKey || event.ctrlKey || event.altKey) return
-      const target = event.target as HTMLElement
-      if (target.closest("input, textarea, select, [contenteditable]")) return
-
-      const link = byKey.get(event.key)
-      if (!link) return
-
-      event.preventDefault()
-      link.click()
-    })
-  })()
-</script>

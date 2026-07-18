@@ -1,10 +1,12 @@
 export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("en-US", {
+  const parts = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
-    month: "short",
-    day: "numeric",
+    month: "2-digit",
+    day: "2-digit",
     timeZone: "UTC",
-  }).format(date)
+  }).formatToParts(date)
+  const get = (type: string) => parts.find((p) => p.type === type)?.value
+  return `${get("day")}.${get("month")}.${get("year")}`
 }
 
 export const isSubpost = (id: string) => id.includes("/")

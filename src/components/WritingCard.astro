@@ -1,0 +1,82 @@
+---
+import { formatDate } from "@/lib/utils"
+import type { CollectionEntry } from "astro:content"
+
+type Props = { post: CollectionEntry<"writing"> }
+
+const { post } = Astro.props
+---
+
+<li>
+  <a href={`/writing/${post.id}`}>
+    <entry-heading>
+      <span data-title>{post.data.title}</span>
+      <time datetime={post.data.date.toISOString()}
+        >{formatDate(post.data.date)}</time
+      >
+      {post.data.tags && (
+          <entry-tags>
+            {post.data.tags.map((tag) => (
+              <span>#{tag}</span>
+            ))}
+          </entry-tags>
+        )}
+    </entry-heading>
+    <p>{post.data.description}</p>
+  </a>
+</li>
+
+<style>
+  li {
+    display: block;
+  }
+
+  a {
+    display: block;
+    margin-inline: calc(-1 * var(--space-s));
+    padding: var(--space-2xs) var(--space-s);
+    border-radius: var(--radius-md);
+    text-decoration-line: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  entry-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs);
+
+    [data-title] {
+      font-size: var(--step-1);
+      line-height: calc(var(--leading-offset) + 1em);
+      font-weight: var(--font-weight-medium);
+      color: var(--foreground);
+    }
+
+    time {
+      flex-shrink: 0;
+      font-size: var(--step--1);
+      color: var(--muted-foreground);
+    }
+
+    entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3xs);
+      font-size: var(--step--1);
+
+      span {
+        color: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+      }
+    }
+  }
+
+  p {
+    margin-block-start: var(--space-3xs);
+    color: var(--muted-foreground);
+  }
+</style>
