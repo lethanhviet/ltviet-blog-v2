@@ -3,13 +3,16 @@ import Cosmos from "@/assets/icons/cosmos.svg"
 import Email from "@/assets/icons/email.svg"
 import Home from "@/assets/icons/home.svg"
 import Instagram from "@/assets/icons/instagram.svg"
+import Library from "@/assets/icons/library.svg"
 import RSS from "@/assets/icons/rss.svg"
 import Writing from "@/assets/icons/writing.svg"
 
 export const SITE = {
-  title: "ltviet",
-  description: "Viet's personal site.",
-  locale: "en-US",
+  title: "Viet\'s note",
+  description: "Industrial robotics integrator sharing notes on business, tech, economics, history, books, travel, and food—ideas, experiments, and rabbit holes.",
+  href: 'https://ltviet.com',
+  author: 'ltviet',
+  locale: "vi-VN",
   dir: "ltr",
   defaultPageImage: "/static/opengraph-image.png",
   defaultPostImage: "/static/1200x630.png",
@@ -27,6 +30,7 @@ export const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
     items: [
       { href: "/", label: "Home", icon: Home },
       { href: "/writing", label: "Writing", icon: Writing },
+      { href: "/library", label: "Library", icon: Library },
     ],
   },
   {

@@ -1,0 +1,125 @@
+---
+import { Image } from "astro:assets"
+import type { CollectionEntry } from "astro:content"
+
+type Props = {
+  book: CollectionEntry<"books">
+  variant?: "cover" | "rating"
+  showTags?: boolean
+}
+
+const { book, variant = "cover", showTags = variant === "rating" } =
+  Astro.props
+const { title, author, cover, rating, tags } = book.data
+---
+
+<li
+  data-variant={variant}
+  data-tags={variant === "rating" ? JSON.stringify(tags ?? []) : undefined}
+>
+  {variant === "cover" && (
+    <Image src={cover} alt={`${title} cover`} width={64} height={96} />
+  )}
+  {variant === "rating" && (
+    <book-rating aria-label={`Rated ${rating} out of 5`}>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <span data-filled={i < rating || undefined} />
+      ))}
+    </book-rating>
+  )}
+  <book-heading>
+    <span data-title>{title}</span>
+    <span data-author>{author}</span>
+  </book-heading>
+  {showTags && tags && tags.length > 0 && (
+    <book-tags>
+      {tags.slice(0, 2).map((tag) => (
+        <span>{tag}</span>
+      ))}
+    </book-tags>
+  )}
+</li>
+
+<style>
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-xs) var(--space-s);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--muted);
+    }
+  }
+
+  img {
+    flex-shrink: 0;
+    inline-size: 2.75rem;
+    block-size: 4.125rem;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  book-rating {
+    flex-shrink: 0;
+    inline-size: 3rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+
+    span {
+      inline-size: 0.4rem;
+      block-size: 0.4rem;
+      border-radius: var(--radius-xs);
+      background-color: var(--border);
+
+      &[data-filled] {
+        background-color: var(--foreground);
+      }
+    }
+  }
+
+  book-heading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    [data-title] {
+      font-size: var(--step-0);
+      font-weight: var(--font-weight-medium);
+      color: var(--foreground);
+    }
+
+    [data-author] {
+      font-size: var(--step--1);
+      color: var(--muted-foreground);
+    }
+  }
+
+  book-tags {
+    flex-shrink: 0;
+    max-inline-size: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-3xs);
+    font-size: var(--step--1);
+
+    @media (width < 40rem) {
+      display: none;
+    }
+
+    span {
+      padding: 0.2em 0.6em;
+      color: var(--muted-foreground);
+      background-color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+  }
+</style>
