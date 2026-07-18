@@ -1,5 +1,5 @@
 ---
-import BlogCard from "@/components/BlogCard.astro"
+import WritingCard from "@/components/WritingCard.astro"
 import MetaPage from "@/components/MetaPage.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts } from "@/lib/content"
@@ -8,9 +8,9 @@ const posts = await getPosts()
 ---
 
 <Layout>
-  <MetaPage slot="head" title="Blog" />
+  <MetaPage slot="head" title="Writing" />
   <ul>
-    {posts.map((post) => <BlogCard post={post} />)}
+    {posts.map((post) => <WritingCard post={post} />)}
   </ul>
 </Layout>
 
@@ -18,6 +18,6 @@ const posts = await getPosts()
   ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-m);
+    gap: var(--space-3xs);
   }
 </style>

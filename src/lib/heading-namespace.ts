@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url"
 import GithubSlugger from "github-slugger"
 import { defineHastPlugin } from "satteri"
 
-const SUBPOST = /\/blog\/[^/]+\/(?!index\.md$)([^/]+)\.md$/
+const SUBPOST = /\/writing\/[^/]+\/(?!index\.md$)([^/]+)\.md$/
 
 export function headingNamespace() {
   const slugger = new GithubSlugger()

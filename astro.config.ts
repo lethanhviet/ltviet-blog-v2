@@ -18,7 +18,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
-        !/\/blog\/[^/]+\/[^/]+\/?$/.test(page) &&
+        !/\/writing\/[^/]+\/[^/]+\/?$/.test(page) &&
         !/\/authors\/[^/]+\/?$/.test(page) &&
         !page.includes("/tags/"),
     }),

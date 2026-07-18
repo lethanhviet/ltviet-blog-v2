@@ -1,23 +1,48 @@
 ---
-import { SITE } from "@/consts"
+const year = new Date().getFullYear()
 ---
 
 <footer>
   <p>
-    &copy; {new Date().getFullYear()}
-    {SITE.title}
+    I'm a salve to my emotions, to my likes,<br />
+    to my hatred of boredom, to most of my desires.
+  </p>
+  <p data-meta>
+    Based on <a
+      href="https://github.com/jktrn/astro-erudite"
+      target="_blank"
+      rel="noopener noreferrer">astro-erudite</a
+    >.<br />
+    {year}
   </p>
 </footer>
 
 <style>
   footer {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-s);
     margin-block: var(--space-xs) var(--page-offset-bottom);
 
     p {
       font-size: var(--step--1);
       color: var(--muted-foreground);
+    }
+
+    p[data-meta] {
+      flex-shrink: 0;
+      text-align: right;
+
+      a {
+        color: var(--foreground);
+        text-decoration-line: underline;
+      }
+
+      @media (width < 40rem) {
+        display: none;
+      }
     }
   }
 </style>

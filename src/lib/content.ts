@@ -4,18 +4,18 @@ import { isSubpost } from "@/lib/utils"
 
 export const pageTitle = (title: string) => `${title} | ${SITE.title}`
 
-export async function getPosts(): Promise<CollectionEntry<"blog">[]> {
-  const posts = await getCollection("blog", ({ data }) => !data.draft)
+export async function getPosts(): Promise<CollectionEntry<"writing">[]> {
+  const posts = await getCollection("writing", ({ data }) => !data.draft)
   return posts
     .filter((post) => !isSubpost(post.id))
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 }
 
 export async function getSubposts(): Promise<
-  Map<string, CollectionEntry<"blog">[]>
+  Map<string, CollectionEntry<"writing">[]>
 > {
   const posts = await getCollection(
-    "blog",
+    "writing",
     ({ id, data }) => !data.draft && id.split("/").length === 2,
   )
   posts.sort(
@@ -27,11 +27,11 @@ export async function getSubposts(): Promise<
 }
 
 export async function getTags(): Promise<
-  Map<string, CollectionEntry<"blog">[]>
+  Map<string, CollectionEntry<"writing">[]>
 > {
   const posts = await getPosts()
   const series = await getSubposts()
-  const tags = new Map<string, CollectionEntry<"blog">[]>()
+  const tags = new Map<string, CollectionEntry<"writing">[]>()
   for (const post of posts) {
     const chain = [post, ...(series.get(post.id) ?? [])]
     for (const tag of new Set(

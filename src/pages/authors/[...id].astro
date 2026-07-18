@@ -1,6 +1,6 @@
 ---
 import AuthorCard from "@/components/AuthorCard.astro"
-import BlogCard from "@/components/BlogCard.astro"
+import WritingCard from "@/components/WritingCard.astro"
 import MetaPage from "@/components/MetaPage.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts } from "@/lib/content"
@@ -37,7 +37,7 @@ const posts = (await getPosts()).filter((post) =>
     {posts.length > 0 ? (
         <ul>
           {posts.map((post) => (
-            <BlogCard post={post} />
+            <WritingCard post={post} />
           ))}
         </ul>
       ) : (
