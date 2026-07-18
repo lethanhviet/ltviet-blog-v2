@@ -35,4 +35,24 @@ const writing = defineCollection({
     }),
 })
 
-export const collections = { writing, authors }
+const books = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.md",
+    base: "./src/content/books",
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      author: z.string(),
+      cover: image(),
+      status: z.enum(["bucketlist", "reading", "finished", "dnf"]),
+      rating: z.number().min(0).max(5).default(0),
+      favorite: z.boolean().default(false),
+      started: z.coerce.date().optional(),
+      finished: z.coerce.date().optional(),
+      description: z.string(),
+      tags: z.array(z.string()).optional(),
+    }),
+})
+
+export const collections = { writing, authors, books }

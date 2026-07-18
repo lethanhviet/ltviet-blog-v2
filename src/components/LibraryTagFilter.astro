@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+type Props = { books: CollectionEntry<"books">[] }
+
+const { books } = Astro.props
+
+const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
+---
+
+{tags.length > 0 && (
+  <library-tag-filter>
+    <button type="button" data-filter-tag="all" aria-pressed="true">
+      All
+    </button>
+    {tags.map((tag) => (
+      <button type="button" data-filter-tag={tag} aria-pressed="false">
+        {tag}
+      </button>
+    ))}
+  </library-tag-filter>
+)}
+
+<style>
+  library-tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    margin-block-end: var(--space-s);
+
+    button {
+      appearance: none;
+      padding: 0.2em 0.6em;
+      font-size: var(--step--1);
+      color: var(--muted-foreground);
+      background-color: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--foreground);
+      }
+
+      &[aria-pressed="true"] {
+        color: var(--foreground);
+        background-color: var(--muted);
+        border-color: var(--muted-foreground);
+      }
+    }
+  }
+</style>
+
+<script>
+  class LibraryTagFilter extends HTMLElement {
+    connectedCallback() {
+      const buttons = [...this.querySelectorAll<HTMLButtonElement>("button")]
+      const panel = this.closest<HTMLElement>('[role="tabpanel"]')
+      const items = [...(panel?.querySelectorAll<HTMLLIElement>("ul > li") ?? [])]
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((b) =>
+            b.setAttribute("aria-pressed", String(b === button)),
+          )
+          const tag = button.dataset.filterTag
+          items.forEach((item) => {
+            if (tag === "all") {
+              item.hidden = false
+              return
+            }
+            const tags: string[] = JSON.parse(item.dataset.tags ?? "[]")
+            item.hidden = !tags.includes(tag ?? "")
+          })
+        })
+      })
+    }
+  }
+
+  customElements.define("library-tag-filter", LibraryTagFilter)
+</script>

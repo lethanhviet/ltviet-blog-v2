@@ -2,7 +2,7 @@ import { SITE } from "@/consts"
 import { getCollection, type CollectionEntry } from "astro:content"
 import { isSubpost } from "@/lib/utils"
 
-export const pageTitle = (title: string) => `${title} | ${SITE.title}`
+export const pageTitle = (title: string) => `${SITE.title} · ${title}`
 
 export async function getPosts(): Promise<CollectionEntry<"writing">[]> {
   const posts = await getCollection("writing", ({ data }) => !data.draft)
@@ -48,4 +48,69 @@ export async function getTags(): Promise<
         postsB.length - postsA.length || a.localeCompare(b),
     ),
   )
+}
+
+const byTitle = (a: CollectionEntry<"books">, b: CollectionEntry<"books">) =>
+  a.data.title.localeCompare(b.data.title)
+
+let booksCache: Promise<CollectionEntry<"books">[]> | undefined
+
+function getBooks(): Promise<CollectionEntry<"books">[]> {
+  booksCache ??= getCollection("books")
+  return booksCache
+}
+
+export async function getFavoriteBooks(): Promise<CollectionEntry<"books">[]> {
+  const books = await getBooks()
+  return books
+    .filter((book) => book.data.favorite)
+    .sort(
+      (a, b) =>
+        (b.data.finished?.getTime() ?? 0) - (a.data.finished?.getTime() ?? 0),
+    )
+}
+
+export async function getCurrentlyReadingBooks(): Promise<
+  CollectionEntry<"books">[]
+> {
+  const books = await getBooks()
+  return books
+    .filter((book) => book.data.status === "reading")
+    .sort(
+      (a, b) =>
+        (b.data.started?.getTime() ?? 0) - (a.data.started?.getTime() ?? 0),
+    )
+}
+
+export type BookFullList = {
+  bucketlist: CollectionEntry<"books">[]
+  years: [number, CollectionEntry<"books">[]][]
+  dnf: CollectionEntry<"books">[]
+}
+
+export async function getBookFullList(): Promise<BookFullList> {
+  const books = await getBooks()
+
+  const bucketlist = books
+    .filter((book) => book.data.status === "bucketlist")
+    .sort(byTitle)
+  const dnf = books.filter((book) => book.data.status === "dnf").sort(byTitle)
+  const finished = books.filter(
+    (book) => book.data.status === "finished" && book.data.finished,
+  )
+
+  const byYear = Map.groupBy(
+    finished,
+    (book) => book.data.finished!.getFullYear(),
+  )
+  const years: [number, CollectionEntry<"books">[]][] = [...byYear]
+    .sort(([a], [b]) => b - a)
+    .map(([year, entries]) => [
+      year,
+      entries.sort(
+        (a, b) => b.data.finished!.getTime() - a.data.finished!.getTime(),
+      ),
+    ])
+
+  return { bucketlist, years, dnf }
 }

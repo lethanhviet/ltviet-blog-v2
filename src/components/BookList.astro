@@ -1,0 +1,26 @@
+---
+import BookCard from "@/components/BookCard.astro"
+import type { CollectionEntry } from "astro:content"
+
+type Props = {
+  books: CollectionEntry<"books">[]
+  variant?: "cover" | "rating"
+  showTags?: boolean
+}
+
+const { books, variant, showTags } = Astro.props
+---
+
+<ul>
+  {books.map((book) => (
+    <BookCard book={book} variant={variant} showTags={showTags} />
+  ))}
+</ul>
+
+<style>
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+</style>

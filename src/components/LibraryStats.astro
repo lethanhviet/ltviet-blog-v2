@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+type Props = { books: CollectionEntry<"books">[] }
+
+const { books } = Astro.props
+
+const favorites = books.filter((book) => book.data.favorite).length
+const avgRating = books.length
+  ? (
+      books.reduce((sum, book) => sum + book.data.rating, 0) / books.length
+    ).toFixed(1)
+  : "0.0"
+---
+
+<library-stats>
+  <div>
+    <span data-value>{books.length}</span>
+    <span data-label>Books</span>
+  </div>
+  <div>
+    <span data-value>{favorites}</span>
+    <span data-label>Favorites</span>
+  </div>
+  <div>
+    <span data-value>{avgRating}</span>
+    <span data-label>Avg Rating</span>
+  </div>
+</library-stats>
+
+<style>
+  library-stats {
+    display: flex;
+    margin-block-end: var(--space-m);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+
+    div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15em;
+      padding: var(--space-s);
+      text-align: center;
+
+      &:not(:last-child) {
+        border-inline-end: 1px solid var(--border);
+      }
+    }
+
+    [data-value] {
+      font-size: var(--step-2);
+      font-weight: var(--font-weight-medium);
+      color: var(--foreground);
+    }
+
+    [data-label] {
+      font-size: var(--step--2);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--muted-foreground);
+    }
+  }
+</style>
