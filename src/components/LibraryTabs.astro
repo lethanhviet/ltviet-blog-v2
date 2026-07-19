@@ -32,6 +32,16 @@ const { tabs, variant = "underline" } = Astro.props
     border-block-end: 2px solid var(--border);
     margin-block-end: var(--space-m);
     scrollbar-width: none;
+    background-color: var(--background);
+    background-image:
+      linear-gradient(to right, var(--background), transparent),
+      linear-gradient(to left, var(--background), transparent),
+      linear-gradient(to right, var(--border), transparent),
+      linear-gradient(to left, var(--border), transparent);
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-size: 1.5rem 100%, 1.5rem 100%, 0.75rem 100%, 0.75rem 100%;
+    background-attachment: local, local, scroll, scroll;
 
     &::-webkit-scrollbar {
       display: none;
