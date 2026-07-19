@@ -10,6 +10,9 @@ type Props = {
 }
 
 const { books, showTags, showRating, showDescription } = Astro.props
+
+// Description cards are taller, so fewer of them fit above the fold.
+const eagerCount = showDescription ? 3 : 4
 ---
 
 <ul>
@@ -19,7 +22,7 @@ const { books, showTags, showRating, showDescription } = Astro.props
       showTags={showTags}
       showRating={showRating}
       showDescription={showDescription}
-      loading={i < 4 ? "eager" : "lazy"}
+      loading={i < eagerCount ? "eager" : "lazy"}
     />
   ))}
 </ul>
