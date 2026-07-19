@@ -45,16 +45,15 @@ const yearTabs = fullList.years.map(([year, books]) => ({
     <h1>Library</h1>
     <prose-content>
       <p>
-        {totalFinishedBooks} books in the last {totalYears} years. Too many books,
-        too little time.
+        {totalFinishedBooks}
+        books in the last {totalYears} years. Too many books, too little time.
       </p>
       <blockquote>
         <p>
           In my whole life, I have known no wise people (over a broad subject
-          matter area) who didn't read all the time—none, zero. You'd be
-          amazed at how much Warren reads—and at how much I read. My children
-          laugh at me. They think I'm a book with a couple of legs sticking
-          out.
+          matter area) who didn't read all the time—none, zero. You'd be amazed
+          at how much Warren reads—and at how much I read. My children laugh at
+          me. They think I'm a book with a couple of legs sticking out.
         </p>
         <p>— Charlie Munger</p>
       </blockquote>
@@ -63,12 +62,22 @@ const yearTabs = fullList.years.map(([year, books]) => ({
 
   <LibraryTabs tabs={tabs}>
     <div role="tabpanel" id="panel-favorites" aria-labelledby="tab-favorites">
-      <BookList books={favorites} />
+      <BookList books={favorites} showDescription />
     </div>
-    <div role="tabpanel" id="panel-reading" aria-labelledby="tab-reading" hidden>
-      <BookList books={reading} meta="tags" />
+    <div
+      role="tabpanel"
+      id="panel-reading"
+      aria-labelledby="tab-reading"
+      hidden
+    >
+      <BookList books={reading} showTags />
     </div>
-    <div role="tabpanel" id="panel-finished" aria-labelledby="tab-finished" hidden>
+    <div
+      role="tabpanel"
+      id="panel-finished"
+      aria-labelledby="tab-finished"
+      hidden
+    >
       <LibraryTabs tabs={yearTabs} variant="pill">
         {fullList.years.map(([year, books], i) => (
           <div
@@ -79,7 +88,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
           >
             <LibraryStats books={books} />
             <LibraryTagFilter books={books} />
-            <BookList books={books} meta="rating" />
+            <BookList books={books} showRating />
           </div>
         ))}
       </LibraryTabs>
@@ -90,10 +99,10 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       aria-labelledby="tab-bucketlist"
       hidden
     >
-      <BookList books={fullList.bucketlist} meta="tags" />
+      <BookList books={fullList.bucketlist} showTags />
     </div>
     <div role="tabpanel" id="panel-dnf" aria-labelledby="tab-dnf" hidden>
-      <BookList books={fullList.dnf} meta="tags" />
+      <BookList books={fullList.dnf} showTags />
     </div>
   </LibraryTabs>
 </Layout>

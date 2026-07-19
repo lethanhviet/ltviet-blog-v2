@@ -11,16 +11,18 @@ const { post } = Astro.props
   <a href={`/writing/${post.id}`}>
     <entry-heading>
       <span data-title>{post.data.title}</span>
-      <time datetime={post.data.date.toISOString()}
-        >{formatDate(post.data.date)}</time
-      >
-      {post.data.tags && (
-          <entry-tags>
-            {post.data.tags.map((tag) => (
-              <span>#{tag}</span>
-            ))}
-          </entry-tags>
-        )}
+      <entry-meta>
+        <time datetime={post.data.date.toISOString()}
+          >{formatDate(post.data.date)}</time
+        >
+        {post.data.tags && (
+            <entry-tags>
+              {post.data.tags.map((tag) => (
+                <span>#{tag}</span>
+              ))}
+            </entry-tags>
+          )}
+      </entry-meta>
     </entry-heading>
     <p>{post.data.description}</p>
   </a>
@@ -46,15 +48,21 @@ const { post } = Astro.props
 
   entry-heading {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-2xs);
+    flex-direction: column;
+    gap: var(--space-3xs);
 
     [data-title] {
       font-size: var(--step-1);
       line-height: calc(var(--leading-offset) + 1em);
       font-weight: var(--font-weight-medium);
       color: var(--foreground);
+    }
+
+    entry-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-2xs);
     }
 
     time {
