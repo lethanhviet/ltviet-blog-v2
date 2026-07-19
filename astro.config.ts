@@ -15,6 +15,9 @@ export default defineConfig({
   site: "https://ltviet.com",
   compressHTML: true,
   prefetch: { prefetchAll: true },
+  build: {
+    inlineStylesheets: "always",
+  },
   integrations: [
     sitemap({
       filter: (page) =>
