@@ -1,4 +1,6 @@
 ---
+import CloseIcon from "@/assets/icons/close.svg"
+import MenuIcon from "@/assets/icons/menu.svg"
 import Logo from "@/assets/logo.svg"
 import ThemeToggle from "@/components/ThemeToggle.astro"
 import { NAV_GROUPS, SITE } from "@/consts"
@@ -8,12 +10,22 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
 ---
 
 <aside data-bar>
+  <button
+    data-icon-button
+    data-menu-toggle
+    aria-label="Toggle menu"
+    aria-expanded="false"
+    aria-controls="mobile-nav"
+  >
+    <menu-icon><MenuIcon aria-hidden="true" /></menu-icon>
+    <close-icon><CloseIcon aria-hidden="true" /></close-icon>
+  </button>
   <sidebar-inner>
     <a href="/" aria-label={SITE.title}>
       <Logo />
       <span>{SITE.title}</span>
     </a>
-    <nav>
+    <nav id="mobile-nav">
       {NAV_GROUPS.map((group) => (
           <ul>
             {group.label && <li data-group-label>{group.label}</li>}
@@ -54,7 +66,8 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     height: calc(100svh - var(--page-offset-top) - var(--page-offset-bottom));
 
     @media (width < 64rem) {
-      position: static;
+      position: relative;
+      top: auto;
       height: auto;
       flex-direction: row;
       align-items: center;
@@ -83,10 +96,8 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
         inline-size: 1.125rem;
         block-size: 1.125rem;
         flex-shrink: 0;
-      }
 
-      @media (width < 26rem) {
-        span {
+        @media (width < 64rem) {
           display: none;
         }
       }
@@ -115,11 +126,32 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     }
 
     @media (width < 64rem) {
-      flex-direction: row;
-      align-items: center;
-      gap: var(--space-2xs);
-      overflow-x: auto;
-      overflow-y: visible;
+      position: absolute;
+      inset-inline: calc(-1 * var(--bar-gutter));
+      top: 100%;
+      z-index: 10;
+      max-height: calc(100svh - 100% - var(--space-m));
+      padding: var(--space-xs) var(--bar-gutter) var(--space-s);
+      background-color: var(--background);
+      border-block-end: 2px solid var(--border);
+      box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.2);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-0.5rem);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s;
+    }
+  }
+
+  aside[data-menu-open] nav {
+    @media (width < 64rem) {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
     }
   }
 
@@ -127,22 +159,10 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     display: flex;
     flex-direction: column;
     gap: var(--space-3xs);
-
-    @media (width < 64rem) {
-      flex-direction: row;
-      align-items: center;
-      gap: var(--space-2xs);
-    }
   }
 
-  nav ul:has(li[data-group-label]) {
-    a {
-      font-size: var(--step--1);
-    }
-
-    @media (width < 64rem) {
-      display: none;
-    }
+  nav ul:has(li[data-group-label]) a {
+    font-size: var(--step--1);
   }
 
   li[data-group-label] {
@@ -153,10 +173,6 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--muted-foreground);
-
-    @media (width < 64rem) {
-      display: none;
-    }
   }
 
   nav a {
@@ -184,14 +200,6 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
       color: var(--foreground);
       background-color: var(--muted);
     }
-
-    @media (width < 64rem) {
-      padding: var(--space-3xs);
-
-      > span {
-        display: none;
-      }
-    }
   }
 
   sidebar-toggle {
@@ -204,4 +212,61 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
       margin-inline-end: -0.5rem;
     }
   }
+
+  [data-menu-toggle] {
+    display: none;
+
+    @media (width < 64rem) {
+      display: inline-flex;
+    }
+  }
+
+  close-icon {
+    display: none;
+  }
+
+  aside[data-menu-open] {
+    menu-icon {
+      display: none;
+    }
+
+    close-icon {
+      display: inline-flex;
+    }
+  }
 </style>
+
+<script>
+  const aside = document.querySelector<HTMLElement>("[data-bar]")
+  const toggle = document.querySelector<HTMLElement>("[data-menu-toggle]")
+  const nav = aside?.querySelector("nav")
+
+  if (aside && toggle && nav) {
+    const closeMenu = () => {
+      aside.removeAttribute("data-menu-open")
+      toggle.setAttribute("aria-expanded", "false")
+    }
+
+    toggle.addEventListener("click", () => {
+      const open = aside.hasAttribute("data-menu-open")
+      aside.toggleAttribute("data-menu-open", !open)
+      toggle.setAttribute("aria-expanded", String(!open))
+    })
+
+    nav.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) closeMenu()
+    })
+
+    document.addEventListener("click", (event) => {
+      if (
+        aside.hasAttribute("data-menu-open") &&
+        !aside.contains(event.target as Node)
+      )
+        closeMenu()
+    })
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMenu()
+    })
+  }
+</script>
