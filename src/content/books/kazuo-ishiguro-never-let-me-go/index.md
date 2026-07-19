@@ -1,5 +1,5 @@
 ---
-title: 'Never Let Me Go"
+title: 'Never Let Me Go'
 author: 'Kazuo Ishiguro'
 cover: './banner.jpg'
 status: 'finished'
