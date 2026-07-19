@@ -66,7 +66,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       <BookList books={favorites} />
     </div>
     <div role="tabpanel" id="panel-reading" aria-labelledby="tab-reading" hidden>
-      <BookList books={reading} showTags />
+      <BookList books={reading} meta="tags" />
     </div>
     <div role="tabpanel" id="panel-finished" aria-labelledby="tab-finished" hidden>
       <LibraryTabs tabs={yearTabs} variant="pill">
@@ -79,7 +79,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
           >
             <LibraryStats books={books} />
             <LibraryTagFilter books={books} />
-            <BookList books={books} variant="rating" />
+            <BookList books={books} meta="rating" />
           </div>
         ))}
       </LibraryTabs>
@@ -90,10 +90,10 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       aria-labelledby="tab-bucketlist"
       hidden
     >
-      <BookList books={fullList.bucketlist} showTags />
+      <BookList books={fullList.bucketlist} meta="tags" />
     </div>
     <div role="tabpanel" id="panel-dnf" aria-labelledby="tab-dnf" hidden>
-      <BookList books={fullList.dnf} showTags />
+      <BookList books={fullList.dnf} meta="tags" />
     </div>
   </LibraryTabs>
 </Layout>
