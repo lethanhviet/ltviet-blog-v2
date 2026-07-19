@@ -4,34 +4,27 @@ import type { CollectionEntry } from "astro:content"
 
 type Props = {
   book: CollectionEntry<"books">
-  variant?: "cover" | "rating"
-  showTags?: boolean
+  meta?: "none" | "tags" | "rating"
 }
 
-const { book, variant = "cover", showTags = variant === "rating" } =
-  Astro.props
+const { book, meta = "none" } = Astro.props
 const { title, author, cover, rating, tags } = book.data
 ---
 
-<li
-  data-variant={variant}
-  data-tags={variant === "rating" ? JSON.stringify(tags ?? []) : undefined}
->
-  {variant === "cover" && (
-    <Image src={cover} alt={`${title} cover`} width={64} height={96} />
-  )}
-  {variant === "rating" && (
+<li data-tags={meta === "rating" ? JSON.stringify(tags ?? []) : undefined}>
+  <Image src={cover} alt={`${title} cover`} width={64} height={96} />
+  <book-heading>
+    <span data-title>{title}</span>
+    <span data-author>{author}</span>
+  </book-heading>
+  {meta === "rating" && (
     <book-rating aria-label={`Rated ${rating} out of 5`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <span data-filled={i < rating || undefined} />
       ))}
     </book-rating>
   )}
-  <book-heading>
-    <span data-title>{title}</span>
-    <span data-author>{author}</span>
-  </book-heading>
-  {showTags && tags && tags.length > 0 && (
+  {meta === "tags" && tags && tags.length > 0 && (
     <book-tags>
       {tags.slice(0, 2).map((tag) => (
         <span>{tag}</span>
@@ -64,25 +57,6 @@ const { title, author, cover, rating, tags } = book.data
     border: 1px solid var(--border);
   }
 
-  book-rating {
-    flex-shrink: 0;
-    inline-size: 3rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25em;
-
-    span {
-      inline-size: 0.4rem;
-      block-size: 0.4rem;
-      border-radius: var(--radius-xs);
-      background-color: var(--border);
-
-      &[data-filled] {
-        background-color: var(--foreground);
-      }
-    }
-  }
-
   book-heading {
     flex: 1;
     display: flex;
@@ -98,6 +72,26 @@ const { title, author, cover, rating, tags } = book.data
     [data-author] {
       font-size: var(--step--1);
       color: var(--muted-foreground);
+    }
+  }
+
+  book-rating {
+    flex-shrink: 0;
+    inline-size: 3rem;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.25em;
+
+    span {
+      inline-size: 0.4rem;
+      block-size: 0.4rem;
+      border-radius: var(--radius-xs);
+      background-color: var(--border);
+
+      &[data-filled] {
+        background-color: var(--foreground);
+      }
     }
   }
 

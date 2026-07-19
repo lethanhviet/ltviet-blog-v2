@@ -4,17 +4,14 @@ import type { CollectionEntry } from "astro:content"
 
 type Props = {
   books: CollectionEntry<"books">[]
-  variant?: "cover" | "rating"
-  showTags?: boolean
+  meta?: "none" | "tags" | "rating"
 }
 
-const { books, variant, showTags } = Astro.props
+const { books, meta } = Astro.props
 ---
 
 <ul>
-  {books.map((book) => (
-    <BookCard book={book} variant={variant} showTags={showTags} />
-  ))}
+  {books.map((book) => <BookCard book={book} meta={meta} />)}
 </ul>
 
 <style>
