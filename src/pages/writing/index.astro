@@ -9,12 +9,21 @@ const posts = await getPosts()
 
 <Layout>
   <MetaPage slot="head" title="Writing" />
+  <h1>Writing</h1>
   <ul>
     {posts.map((post) => <WritingCard post={post} />)}
   </ul>
 </Layout>
 
 <style>
+  h1 {
+    font-size: var(--step-3);
+    line-height: calc(var(--leading-offset) + 1em);
+    font-weight: var(--font-weight-medium);
+    color: var(--foreground);
+    margin-block-end: var(--space-m);
+  }
+
   ul {
     display: flex;
     flex-direction: column;
