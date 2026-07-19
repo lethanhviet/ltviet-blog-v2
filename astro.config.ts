@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config"
+import { defineConfig, passthroughImageService } from "astro/config"
 import sitemap from "@astrojs/sitemap"
 import { satteri } from "@astrojs/markdown-satteri"
 import {
@@ -15,6 +15,9 @@ export default defineConfig({
   site: "https://ltviet.com",
   compressHTML: true,
   prefetch: { prefetchAll: true },
+  image: {
+    service: passthroughImageService(),
+  },
   build: {
     inlineStylesheets: "always",
   },
