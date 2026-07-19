@@ -18,6 +18,10 @@ html,
   overflow-x: clip;
 }
 
+body {
+  overflow-x: clip;
+}
+
 hr {
   height: 0;
   color: inherit;
