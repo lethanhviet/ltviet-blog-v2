@@ -4,14 +4,24 @@ import type { CollectionEntry } from "astro:content"
 
 type Props = {
   books: CollectionEntry<"books">[]
-  meta?: "none" | "tags" | "rating"
+  showTags?: boolean
+  showRating?: boolean
+  showDescription?: boolean
 }
 
-const { books, meta } = Astro.props
+const { books, showTags, showRating, showDescription } = Astro.props
 ---
 
 <ul>
-  {books.map((book) => <BookCard book={book} meta={meta} />)}
+  {books.map((book, i) => (
+    <BookCard
+      book={book}
+      showTags={showTags}
+      showRating={showRating}
+      showDescription={showDescription}
+      loading={i < 4 ? "eager" : "lazy"}
+    />
+  ))}
 </ul>
 
 <style>
