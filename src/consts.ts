@@ -1,4 +1,5 @@
 import type { SvgComponent } from "astro/types"
+import Clock from "@/assets/icons/clock.svg"
 import Cosmos from "@/assets/icons/cosmos.svg"
 import Email from "@/assets/icons/email.svg"
 import Home from "@/assets/icons/home.svg"
@@ -30,6 +31,7 @@ export const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
     items: [
       { href: "/", label: "Home", icon: Home },
       { href: "/writing", label: "Writing", icon: Writing },
+      { href: "/now", label: "Now", icon: Clock },
       { href: "/library", label: "Library", icon: Library },
     ],
   },

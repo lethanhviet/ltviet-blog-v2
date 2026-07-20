@@ -1,0 +1,84 @@
+---
+import Briefcase from "@/assets/icons/briefcase.svg"
+import Heart from "@/assets/icons/heart.svg"
+import Library from "@/assets/icons/library.svg"
+import Plane from "@/assets/icons/plane.svg"
+import MetaPage from "@/components/MetaPage.astro"
+import NowSection from "@/components/NowSection.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getLastUpdated, getLatestNow } from "@/lib/content"
+import { formatDate } from "@/lib/utils"
+
+const entry = await getLatestNow()
+const lastUpdated = entry ? getLastUpdated(entry.filePath!) : undefined
+---
+
+<Layout>
+  <MetaPage
+    slot="head"
+    title="Now"
+    description="A snapshot of what is occupying my time and attention right now."
+  />
+  <now-intro>
+    <h1>What I am <i>up to right now</i>.</h1>
+    <prose-content>
+      <p>
+        A snapshot of what is occupying my time and attention.
+      </p>
+    </prose-content>
+    {lastUpdated && (
+      <p data-updated>
+        <span aria-hidden="true">&bull;</span> Last updated <time
+          datetime={lastUpdated.toISOString()}>{formatDate(lastUpdated)}</time
+        >
+      </p>
+    )}
+  </now-intro>
+
+  {entry && (
+    <now-sections>
+      <NowSection label="Work" icon={Briefcase} items={entry.data.work} />
+      <NowSection label="Read" icon={Library} items={entry.data.read} />
+      <NowSection label="Interest" icon={Heart} items={entry.data.interest} />
+      <NowSection label="Travel" icon={Plane} items={entry.data.travel} />
+    </now-sections>
+  )}
+</Layout>
+
+<style>
+  now-intro {
+    display: block;
+    margin-block-end: var(--space-l);
+
+    @media (width >= 64rem) {
+      margin-block-start: -0.2em;
+    }
+
+    h1 {
+      font-size: var(--step-3);
+      line-height: calc(var(--leading-offset) + 1em);
+      font-weight: var(--font-weight-medium);
+      color: var(--foreground);
+      margin-block-end: var(--space-m);
+    }
+
+    [data-updated] {
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      margin-block-start: var(--space-s);
+      font-size: var(--step--1);
+      color: var(--muted-foreground);
+
+      span {
+        color: var(--foreground);
+      }
+    }
+  }
+
+  now-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+  }
+</style>

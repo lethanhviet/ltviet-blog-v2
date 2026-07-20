@@ -1,6 +1,8 @@
 import { SITE } from "@/consts"
 import { getCollection, type CollectionEntry } from "astro:content"
 import { isSubpost } from "@/lib/utils"
+import { execFileSync } from "node:child_process"
+import { statSync } from "node:fs"
 
 export const pageTitle = (title: string) => `${SITE.title} · ${title}`
 
@@ -113,4 +115,34 @@ export async function getBookFullList(): Promise<BookFullList> {
     ])
 
   return { bucketlist, years, dnf }
+}
+
+export async function getLatestNow(): Promise<
+  CollectionEntry<"now"> | undefined
+> {
+  const entries = await getCollection("now")
+  return entries.reduce<CollectionEntry<"now"> | undefined>(
+    (latest, entry) =>
+      !latest || entry.id.localeCompare(latest.id) > 0 ? entry : latest,
+    undefined,
+  )
+}
+
+export function getLastUpdated(filePath: string): Date | undefined {
+  try {
+    const output = execFileSync(
+      "git",
+      ["log", "-1", "--format=%aI", "--", filePath],
+      { encoding: "utf-8" },
+    ).trim()
+    if (output) return new Date(output)
+  } catch {
+    // fall through to mtime below
+  }
+
+  try {
+    return statSync(filePath).mtime
+  } catch {
+    return undefined
+  }
 }

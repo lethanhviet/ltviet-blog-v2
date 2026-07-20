@@ -22,3 +22,19 @@ export const normalizePath = (pathname: string) => {
 }
 
 export const hashId = (hash: string) => decodeURIComponent(hash.slice(1))
+
+export function renderInline(text: string): string {
+  const escaped = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+  return escaped
+    .replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="nofollow noreferrer noopener">$1</a>',
+    )
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/_([^_]+)_/g, "<em>$1</em>")
+}
