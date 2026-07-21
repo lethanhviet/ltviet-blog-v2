@@ -1,8 +1,6 @@
 ---
-import BookList from "@/components/library/BookList.astro"
-import LibraryStats from "@/components/library/LibraryStats.astro"
-import LibraryTabs from "@/components/library/LibraryTabs.astro"
-import LibraryTagFilter from "@/components/library/LibraryTagFilter.astro"
+import LibraryCatalog from "@/components/library/LibraryCatalog.astro"
+import LibraryIntro from "@/components/library/LibraryIntro.astro"
 import MetaPage from "@/components/MetaPage.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getLibraryBooks } from "@/lib/content"
@@ -14,19 +12,6 @@ const totalFinishedBooks = library.years.reduce(
   0,
 )
 const totalYears = library.years.length
-
-const tabs = [
-  { id: "favorites", label: "Favorites" },
-  { id: "reading", label: "Currently Reading" },
-  { id: "finished", label: "Finished" },
-  { id: "bucketlist", label: "Bucket List" },
-  { id: "dnf", label: "DNF" },
-]
-
-const yearTabs = library.years.map(([year, books]) => ({
-  id: `year-${year}`,
-  label: `${year} (${books.length})`,
-}))
 ---
 
 <Layout>
@@ -35,109 +20,9 @@ const yearTabs = library.years.map(([year, books]) => ({
     title="Library"
     description="For in much wisdom is much grief: and he that increaseth knowledge increaseth sorrow."
   />
-  <library-intro>
-    <h1>Too many books, too little time...</h1>
-    <prose-content>
-      <p>I enjoy reading—though that may be an understatement.</p>
-      <p>
-        I read almost everywhere: at home, in the office, in the car, on trains
-        or planes—as long as I could stay awake. My favorite place to read is
-        coffee shops: good coffee, good book, no agenda. Before traveling
-        somewhere, I would pick up a book about the place—its history, culture,
-        people, and landscape.
-      </p>
-      <p>
-        I don’t confine myself to any particular genre. I’ve found great reads
-        in fiction, children’s literature, biography, memoir, history, politics,
-        religion, geography, business, economics, and plenty more.
-      </p>
-      <p>
-        For me, reading is leisure: it keeps my mind active, satisfies my
-        curiosity, and offers the best way to relieve stress.
-      </p>
-      <p>
-        This page is where I keep track of that journey:
-        {totalFinishedBooks}
-        books over the last {totalYears} years.
-      </p>
-      <blockquote>
-        <p>
-          I bought a copy of Faulkner’s Light In August and went to the noisiest
-          jazz café I could think of, reading my new book while listening to
-          Ornette Coleman and Bud Powell and drinking my hot, thick,
-          foul-tasting coffee. At five-thirty I closed my book, went outside,
-          and ate a light supper. How many Sundays-how many hundreds of Sundays
-          like this-lay ahead of me? “Quiet, peaceful, and lonely,” I said aloud
-          to myself. On Sundays, I didn’t wind my spring.
-        </p>
-        <p>— Norwegian Wood, by Haruki Murakami</p>
-      </blockquote>
-    </prose-content>
-  </library-intro>
-
-  <LibraryTabs tabs={tabs}>
-    <div role="tabpanel" id="panel-favorites" aria-labelledby="tab-favorites">
-      <BookList books={library.favorites} showDescription />
-    </div>
-    <div
-      role="tabpanel"
-      id="panel-reading"
-      aria-labelledby="tab-reading"
-      hidden
-    >
-      <BookList books={library.reading} showTags />
-    </div>
-    <div
-      role="tabpanel"
-      id="panel-finished"
-      aria-labelledby="tab-finished"
-      hidden
-    >
-      <LibraryTabs tabs={yearTabs} variant="pill">
-        {library.years.map(([year, books], i) => (
-          <div
-            role="tabpanel"
-            id={`panel-year-${year}`}
-            aria-labelledby={`tab-year-${year}`}
-            hidden={i > 0}
-          >
-            <LibraryStats books={books} />
-            <LibraryTagFilter books={books}>
-              <BookList books={books} showRating filterable />
-            </LibraryTagFilter>
-          </div>
-        ))}
-      </LibraryTabs>
-    </div>
-    <div
-      role="tabpanel"
-      id="panel-bucketlist"
-      aria-labelledby="tab-bucketlist"
-      hidden
-    >
-      <BookList books={library.bucketlist} showTags />
-    </div>
-    <div role="tabpanel" id="panel-dnf" aria-labelledby="tab-dnf" hidden>
-      <BookList books={library.dnf} showTags />
-    </div>
-  </LibraryTabs>
+  <LibraryIntro
+    totalFinishedBooks={totalFinishedBooks}
+    totalYears={totalYears}
+  />
+  <LibraryCatalog library={library} />
 </Layout>
-
-<style>
-  library-intro {
-    display: block;
-    margin-block-end: var(--space-l);
-
-    @media (width >= 64rem) {
-      margin-block-start: -0.2em;
-    }
-
-    h1 {
-      font-size: var(--step-3);
-      line-height: calc(var(--leading-offset) + 1em);
-      font-weight: var(--font-weight-medium);
-      color: var(--foreground);
-      margin-block-end: var(--space-m);
-    }
-  }
-</style>

@@ -40,9 +40,9 @@ const { title, author, cover, rating, tags, description } = book.data
   {(showRating || showTags) && (
     <book-meta>
       {showRating && (
-        <book-rating aria-label={`Rated ${rating} out of 5`}>
+        <book-rating role="img" aria-label={`Rated ${rating} out of 5`}>
           {Array.from({ length: 5 }).map((_, i) => (
-            <span data-filled={i < rating || undefined} />
+            <span aria-hidden="true" data-filled={i < rating || undefined} />
           ))}
         </book-rating>
       )}

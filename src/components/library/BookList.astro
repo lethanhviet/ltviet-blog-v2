@@ -8,9 +8,17 @@ type Props = {
   showRating?: boolean
   showDescription?: boolean
   filterable?: boolean
+  firstImageLoading?: "eager" | "lazy"
 }
 
-const { books, showTags, showRating, showDescription, filterable } = Astro.props
+const {
+  books,
+  showTags,
+  showRating,
+  showDescription,
+  filterable,
+  firstImageLoading = "lazy",
+} = Astro.props
 ---
 
 <ul>
@@ -21,7 +29,7 @@ const { books, showTags, showRating, showDescription, filterable } = Astro.props
       showRating={showRating}
       showDescription={showDescription}
       filterable={filterable}
-      loading={i === 0 ? "eager" : "lazy"}
+      loading={i === 0 ? firstImageLoading : "lazy"}
     />
   ))}
 </ul>

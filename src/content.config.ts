@@ -40,19 +40,40 @@ const books = defineCollection({
     pattern: "**/[^_]*.md",
     base: "./src/content/books",
   }),
-  schema: ({ image }) =>
-    z.object({
+  schema: ({ image }) => {
+    const book = z.object({
       title: z.string(),
       author: z.string(),
       cover: image(),
-      status: z.enum(["bucketlist", "reading", "finished", "dnf"]),
       rating: z.number().min(0).max(5).default(0),
       favorite: z.boolean().default(false),
-      started: z.coerce.date().optional(),
-      finished: z.coerce.date().optional(),
       description: z.string(),
       tags: z.array(z.string()).optional(),
-    }),
+    })
+
+    return z.discriminatedUnion("status", [
+      book.extend({
+        status: z.literal("bucketlist"),
+        started: z.coerce.date().optional(),
+        finished: z.coerce.date().optional(),
+      }),
+      book.extend({
+        status: z.literal("reading"),
+        started: z.coerce.date(),
+        finished: z.coerce.date().optional(),
+      }),
+      book.extend({
+        status: z.literal("finished"),
+        started: z.coerce.date().optional(),
+        finished: z.coerce.date(),
+      }),
+      book.extend({
+        status: z.literal("dnf"),
+        started: z.coerce.date().optional(),
+        finished: z.coerce.date().optional(),
+      }),
+    ])
+  },
 })
 
 const now = defineCollection({
