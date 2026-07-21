@@ -3,61 +3,66 @@ import CloseIcon from "@/assets/icons/close.svg"
 import MenuIcon from "@/assets/icons/menu.svg"
 import Logo from "@/assets/logo.svg"
 import ThemeToggle from "@/components/ThemeToggle.astro"
-import { NAV_GROUPS, SITE } from "@/consts"
+import { NAV_GROUPS, SITE, type NavItem } from "@/consts"
 import { normalizePath } from "@/lib/utils"
 
 const pathname = normalizePath(Astro.url.pathname) || "/"
+
+const isActive = ({ external, href }: NavItem) => {
+  if (external) return false
+  if (href === "/") return pathname === href
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
 ---
 
-<aside data-bar>
+<aside class="sidebar" data-sidebar>
   <button
+    type="button"
     data-icon-button
     data-menu-toggle
-    aria-label="Toggle menu"
+    aria-label="Open navigation"
     aria-expanded="false"
-    aria-controls="mobile-nav"
+    aria-controls="primary-navigation"
   >
-    <menu-icon><MenuIcon aria-hidden="true" /></menu-icon>
-    <close-icon><CloseIcon aria-hidden="true" /></close-icon>
+    <span class="menu-icon"><MenuIcon aria-hidden="true" /></span>
+    <span class="close-icon"><CloseIcon aria-hidden="true" /></span>
   </button>
-  <sidebar-inner>
-    <a href="/" aria-label={SITE.title}>
+  <div class="sidebar__inner">
+    <a class="sidebar__brand" href="/" aria-label={SITE.title}>
       <Logo />
       <span>{SITE.title}</span>
     </a>
-    <nav id="mobile-nav">
+    <nav id="primary-navigation" aria-label="Primary navigation">
       {NAV_GROUPS.map((group) => (
+        <section class="nav-group" aria-label={group.label}>
+          {group.label && <h2>{group.label}</h2>}
           <ul>
-            {group.label && <li data-group-label>{group.label}</li>}
             {group.items.map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    aria-current={
-                      !item.external && pathname === item.href
-                        ? "page"
-                        : undefined
-                    }
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noopener noreferrer" : undefined}
-                  >
-                    <item.icon aria-hidden="true" />
-                    <span>{item.label}</span>
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item) ? "page" : undefined}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                >
+                  <item.icon aria-hidden="true" />
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))}
           </ul>
-        ))}
+        </section>
+      ))}
     </nav>
-  </sidebar-inner>
-  <sidebar-toggle>
+  </div>
+  <div class="sidebar__actions">
     <ThemeToggle />
     <slot name="actions" />
-  </sidebar-toggle>
+  </div>
 </aside>
 
 <style>
-  aside {
+  .sidebar {
     position: sticky;
     top: var(--page-offset-top);
     display: flex;
@@ -72,36 +77,18 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
       flex-direction: row;
       align-items: center;
       gap: var(--space-s);
+      padding-block: var(--space-s);
+      padding-inline: var(--bar-gutter);
+      background-color: color-mix(in oklab, var(--background) 90%, transparent);
+      backdrop-filter: blur(var(--blur-sm));
     }
   }
 
-  sidebar-inner {
+  .sidebar__inner {
     display: flex;
     flex-direction: column;
     gap: var(--space-m);
     min-height: 0;
-
-    > a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: fit-content;
-      flex-shrink: 0;
-      font-weight: var(--font-weight-medium);
-      font-size: var(--step-0);
-      color: var(--foreground);
-      text-decoration-line: none;
-
-      svg {
-        inline-size: 1.125rem;
-        block-size: 1.125rem;
-        flex-shrink: 0;
-
-        @media (width < 64rem) {
-          display: none;
-        }
-      }
-    }
 
     @media (width < 64rem) {
       flex: 1;
@@ -109,6 +96,28 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
       align-items: center;
       justify-content: space-between;
       min-width: 0;
+    }
+  }
+
+  .sidebar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    flex-shrink: 0;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--step-0);
+    color: var(--foreground);
+    text-decoration-line: none;
+
+    :global(svg) {
+      inline-size: 1.125rem;
+      block-size: 1.125rem;
+      flex-shrink: 0;
+
+      @media (width < 64rem) {
+        display: none;
+      }
     }
   }
 
@@ -143,29 +152,31 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
         opacity 0.2s ease,
         transform 0.2s ease,
         visibility 0.2s;
+
+      .sidebar[data-menu-open] & {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
     }
   }
 
-  aside[data-menu-open] nav {
-    @media (width < 64rem) {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
+  .nav-group {
+    display: contents;
   }
 
-  nav ul {
+  .nav-group ul {
     display: flex;
     flex-direction: column;
     gap: var(--space-3xs);
   }
 
-  nav ul:has(li[data-group-label]) a {
+  .nav-group:has(h2) a {
     font-size: var(--step--1);
   }
 
-  li[data-group-label] {
+  .nav-group h2 {
     padding-inline: var(--space-2xs);
     margin-block-end: var(--space-3xs);
     font-size: var(--step-0);
@@ -181,6 +192,7 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     gap: var(--space-2xs);
     padding: var(--space-3xs) var(--space-2xs);
     border-radius: var(--radius-md);
+    font-size: var(--step-0);
     color: var(--muted-foreground);
     text-decoration-line: none;
 
@@ -202,7 +214,7 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     }
   }
 
-  sidebar-toggle {
+  .sidebar__actions {
     display: flex;
     align-items: center;
     margin-inline-start: -0.5rem;
@@ -221,52 +233,73 @@ const pathname = normalizePath(Astro.url.pathname) || "/"
     }
   }
 
-  close-icon {
+  .close-icon {
     display: none;
   }
 
-  aside[data-menu-open] {
-    menu-icon {
+  .sidebar[data-menu-open] {
+    .menu-icon {
       display: none;
     }
 
-    close-icon {
+    .close-icon {
       display: inline-flex;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    nav {
+      transition: none;
     }
   }
 </style>
 
 <script>
-  const aside = document.querySelector<HTMLElement>("[data-bar]")
-  const toggle = document.querySelector<HTMLElement>("[data-menu-toggle]")
-  const nav = aside?.querySelector("nav")
+  for (const sidebar of document.querySelectorAll<HTMLElement>(
+    "[data-sidebar]",
+  )) {
+    const toggle =
+      sidebar.querySelector<HTMLButtonElement>("[data-menu-toggle]")
+    const nav = sidebar.querySelector<HTMLElement>("nav")
+    if (!toggle || !nav) continue
 
-  if (aside && toggle && nav) {
-    const closeMenu = () => {
-      aside.removeAttribute("data-menu-open")
-      toggle.setAttribute("aria-expanded", "false")
+    const setOpen = (open: boolean) => {
+      sidebar.toggleAttribute("data-menu-open", open)
+      toggle.setAttribute("aria-expanded", String(open))
+      toggle.setAttribute(
+        "aria-label",
+        open ? "Close navigation" : "Open navigation",
+      )
     }
+    const closeMenu = () => setOpen(false)
 
-    toggle.addEventListener("click", () => {
-      const open = aside.hasAttribute("data-menu-open")
-      aside.toggleAttribute("data-menu-open", !open)
-      toggle.setAttribute("aria-expanded", String(!open))
-    })
+    toggle.addEventListener("click", () =>
+      setOpen(!sidebar.hasAttribute("data-menu-open")),
+    )
 
     nav.addEventListener("click", (event) => {
-      if ((event.target as Element).closest("a")) closeMenu()
+      if (event.target instanceof Element && event.target.closest("a")) {
+        closeMenu()
+      }
     })
 
     document.addEventListener("click", (event) => {
       if (
-        aside.hasAttribute("data-menu-open") &&
-        !aside.contains(event.target as Node)
-      )
+        sidebar.hasAttribute("data-menu-open") &&
+        event.target instanceof Node &&
+        !sidebar.contains(event.target)
+      ) {
         closeMenu()
+      }
     })
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeMenu()
+      if (event.key === "Escape" && sidebar.hasAttribute("data-menu-open")) {
+        closeMenu()
+        toggle.focus()
+      }
     })
+
+    matchMedia("(width >= 64rem)").addEventListener("change", closeMenu)
   }
 </script>

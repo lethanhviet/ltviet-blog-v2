@@ -10,23 +10,29 @@ import Writing from "@/assets/icons/writing.svg"
 
 export const SITE = {
   title: "Viet\'s note",
-  description: "Industrial system integrator sharing notes on business, tech, economics, history, books, travel, and food—ideas, experiments, and rabbit holes.",
-  href: 'https://ltviet.com',
-  author: 'ltviet',
+  description:
+    "Industrial system integrator sharing notes on business, tech, economics, history, books, travel, and food—ideas, experiments, and rabbit holes.",
+  href: "https://ltviet.com",
+  author: "ltviet",
   locale: "vi-VN",
   dir: "ltr",
   defaultPageImage: "/static/opengraph-image.png",
   defaultPostImage: "/static/1200x630.png",
 } as const
 
-type NavItem = {
+export type NavItem = {
   href: string
   label: string
   icon: SvgComponent
   external?: boolean
 }
 
-export const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
+export type NavGroup = {
+  label?: string
+  items: readonly NavItem[]
+}
+
+export const NAV_GROUPS = [
   {
     items: [
       { href: "/", label: "Home", icon: Home },
@@ -59,4 +65,4 @@ export const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
       { href: "/rss.xml", label: "RSS", icon: RSS, external: true },
     ],
   },
-]
+] as const satisfies readonly NavGroup[]
