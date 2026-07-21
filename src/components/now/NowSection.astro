@@ -1,0 +1,88 @@
+---
+import { renderInline } from "@/lib/utils"
+import type { SvgComponent } from "astro/types"
+
+type Props = {
+  id: string
+  label: string
+  icon: SvgComponent
+  items: string[]
+}
+
+const { id, label, icon: Icon, items } = Astro.props
+const headingId = `now-${id}`
+---
+
+{items.length > 0 && (
+  <section class="now-section" aria-labelledby={headingId}>
+    <header class="now-section__header">
+      <Icon aria-hidden="true" />
+      <h2 id={headingId}>{label}</h2>
+    </header>
+    <ul>
+      {items.map((item) => <li set:html={renderInline(item)} />)}
+    </ul>
+  </section>
+)}
+
+<style>
+  .now-section {
+    display: grid;
+    grid-template-columns: calc(
+        2 *
+        var(--grid-column-width) +
+        var(--grid-gutter)
+      ) 1fr;
+    gap: var(--grid-gutter);
+    align-items: start;
+
+    @media (width < 40rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .now-section__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2xs);
+
+    @media (width < 40rem) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  svg {
+    box-sizing: content-box;
+    flex-shrink: 0;
+    inline-size: 1rem;
+    block-size: 1rem;
+    padding: var(--space-2xs);
+    color: var(--foreground);
+    background-color: var(--muted);
+    border-radius: var(--radius-md);
+  }
+
+  h2 {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    font-weight: inherit;
+    letter-spacing: 0.04em;
+    line-height: inherit;
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding-inline-start: 1.1em;
+    list-style: disc;
+    --underline: var(--muted-foreground);
+  }
+
+  li {
+    color: var(--foreground);
+  }
+</style>

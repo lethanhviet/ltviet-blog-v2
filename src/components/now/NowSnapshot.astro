@@ -1,0 +1,44 @@
+---
+import Briefcase from "@/assets/icons/briefcase.svg"
+import Heart from "@/assets/icons/heart.svg"
+import Library from "@/assets/icons/library.svg"
+import Plane from "@/assets/icons/plane.svg"
+import NowSection from "@/components/now/NowSection.astro"
+import type { CollectionEntry } from "astro:content"
+import type { SvgComponent } from "astro/types"
+
+type NowSnapshot = CollectionEntry<"now">["data"]
+
+type Props = {
+  snapshot: NowSnapshot
+}
+
+type Section = {
+  id: keyof NowSnapshot
+  label: string
+  icon: SvgComponent
+}
+
+const { snapshot } = Astro.props
+
+const sections = [
+  { id: "work", label: "Work", icon: Briefcase },
+  { id: "read", label: "Reading", icon: Library },
+  { id: "interest", label: "Interests", icon: Heart },
+  { id: "travel", label: "Travel", icon: Plane },
+] as const satisfies readonly Section[]
+---
+
+<div class="now-snapshot">
+  {sections.map(({ id, label, icon }) => (
+    <NowSection id={id} label={label} icon={icon} items={snapshot[id]} />
+  ))}
+</div>
+
+<style>
+  .now-snapshot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+import { formatDate } from "@/lib/utils"
+
+type Props = {
+  lastUpdated?: Date
+}
+
+const { lastUpdated } = Astro.props
+---
+
+<section class="now-intro" aria-labelledby="now-title">
+  <h1 id="now-title">What I am <i>up to right now</i>.</h1>
+  <prose-content>
+    <p>A snapshot of what is occupying my time and attention.</p>
+  </prose-content>
+  {lastUpdated && (
+    <p class="now-intro__updated">
+      <span aria-hidden="true">&bull;</span>
+      Last updated
+      <time datetime={lastUpdated.toISOString()}>{formatDate(lastUpdated)}</time>
+    </p>
+  )}
+</section>
+
+<style>
+  .now-intro {
+    margin-block-end: var(--space-l);
+
+    @media (width >= 64rem) {
+      margin-block-start: -0.2em;
+    }
+  }
+
+  h1 {
+    margin-block-end: var(--space-m);
+    color: var(--foreground);
+    font-size: var(--step-3);
+    font-weight: var(--font-weight-medium);
+    line-height: calc(var(--leading-offset) + 1em);
+  }
+
+  .now-intro__updated {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-block-start: var(--space-s);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+
+    span {
+      color: var(--foreground);
+    }
+  }
+</style>

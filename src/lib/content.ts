@@ -112,7 +112,9 @@ export async function getLatestNow(): Promise<
   )
 }
 
-export function getLastUpdated(filePath: string): Date | undefined {
+export function getLastUpdated(filePath?: string): Date | undefined {
+  if (!filePath) return undefined
+
   try {
     const output = execFileSync(
       "git",
