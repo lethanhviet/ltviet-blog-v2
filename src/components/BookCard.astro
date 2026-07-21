@@ -7,6 +7,7 @@ type Props = {
   showTags?: boolean
   showRating?: boolean
   showDescription?: boolean
+  filterable?: boolean
   loading?: "eager" | "lazy"
 }
 
@@ -15,13 +16,14 @@ const {
   showTags = false,
   showRating = false,
   showDescription = false,
+  filterable = false,
   loading = "lazy",
 } = Astro.props
 const { title, author, cover, rating, tags, description } = book.data
 ---
 
 <li
-  data-tags={showRating ? JSON.stringify(tags ?? []) : undefined}
+  data-tags={filterable ? JSON.stringify(tags ?? []) : undefined}
   data-has-description={showDescription || undefined}
 >
   <Image

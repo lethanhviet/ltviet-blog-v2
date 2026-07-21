@@ -48,6 +48,8 @@ const { tabs, variant = "underline" } = Astro.props
     background-color: transparent;
     border: none;
     border-block-end: 2px solid transparent;
+    border-radius: 0;
+    outline: none;
     cursor: pointer;
 
     &:hover {
@@ -87,8 +89,15 @@ const { tabs, variant = "underline" } = Astro.props
 
 <script>
   class LibraryTabs extends HTMLElement {
+    private controller?: AbortController
+
     connectedCallback() {
-      const tablist = this.querySelector<HTMLElement>(':scope > [role="tablist"]')
+      this.controller?.abort()
+      this.controller = new AbortController()
+      const { signal } = this.controller
+      const tablist = this.querySelector<HTMLElement>(
+        ':scope > [role="tablist"]',
+      )
       const tabs = [
         ...(tablist?.querySelectorAll<HTMLButtonElement>('[role="tab"]') ?? []),
       ]
@@ -97,33 +106,50 @@ const { tabs, variant = "underline" } = Astro.props
       )
       const isTopLevel = tablist?.dataset.variant !== "pill"
 
-      const activate = (index: number, updateHash: boolean) => {
+      const activate = (index: number, updateHash = false) => {
+        if (!tabs[index]) return
+
         tabs.forEach((t, j) => {
-          t.setAttribute("aria-selected", String(j === index))
+          const isActive = j === index
+          t.setAttribute("aria-selected", String(isActive))
           const panel = panels[j]
-          if (panel) panel.hidden = j !== index
+          if (panel) panel.hidden = !isActive
         })
+
         if (updateHash && isTopLevel) {
           history.replaceState(null, "", `#${tabs[index].dataset.tab}`)
         }
       }
 
       tabs.forEach((tab, i) => {
-        tab.addEventListener("click", () => activate(i, true))
+        tab.addEventListener("click", () => activate(i, true), { signal })
       })
 
       if (isTopLevel) {
         const syncFromHash = () => {
-          const slug = decodeURIComponent(location.hash.replace(/^#/, ""))
+          let slug = ""
+          try {
+            slug = decodeURIComponent(location.hash.replace(/^#/, ""))
+          } catch {
+            return
+          }
           if (!slug) return
           const index = tabs.findIndex((t) => t.dataset.tab === slug)
-          if (index !== -1) activate(index, false)
+          if (index !== -1) {
+            activate(index)
+          }
         }
         syncFromHash()
-        window.addEventListener("hashchange", syncFromHash)
+        window.addEventListener("hashchange", syncFromHash, { signal })
       }
+    }
+
+    disconnectedCallback() {
+      this.controller?.abort()
     }
   }
 
-  customElements.define("library-tabs", LibraryTabs)
+  if (!customElements.get("library-tabs")) {
+    customElements.define("library-tabs", LibraryTabs)
+  }
 </script>

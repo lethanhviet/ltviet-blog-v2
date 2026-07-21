@@ -5,21 +5,15 @@ import LibraryTabs from "@/components/LibraryTabs.astro"
 import LibraryTagFilter from "@/components/LibraryTagFilter.astro"
 import MetaPage from "@/components/MetaPage.astro"
 import Layout from "@/layouts/Layout.astro"
-import {
-  getBookFullList,
-  getCurrentlyReadingBooks,
-  getFavoriteBooks,
-} from "@/lib/content"
+import { getLibraryBooks } from "@/lib/content"
 
-const favorites = await getFavoriteBooks()
-const reading = await getCurrentlyReadingBooks()
-const fullList = await getBookFullList()
+const library = await getLibraryBooks()
 
-const totalFinishedBooks = fullList.years.reduce(
+const totalFinishedBooks = library.years.reduce(
   (sum, [, books]) => sum + books.length,
   0,
 )
-const totalYears = fullList.years.length
+const totalYears = library.years.length
 
 const tabs = [
   { id: "favorites", label: "Favorites" },
@@ -29,7 +23,7 @@ const tabs = [
   { id: "dnf", label: "DNF" },
 ]
 
-const yearTabs = fullList.years.map(([year, books]) => ({
+const yearTabs = library.years.map(([year, books]) => ({
   id: `year-${year}`,
   label: `${year} (${books.length})`,
 }))
@@ -44,38 +38,37 @@ const yearTabs = fullList.years.map(([year, books]) => ({
   <library-intro>
     <h1>Too many books, too little time...</h1>
     <prose-content>
+      <p>I enjoy reading—though that may be an understatement.</p>
       <p>
-        I enjoy reading—though that may be an understatement.
+        I read almost everywhere: at home, in the office, in the car, on trains
+        or planes—as long as I could stay awake. My favorite place to read is
+        coffee shops: good coffee, good book, no agenda. Before traveling
+        somewhere, I would pick up a book about the place—its history, culture,
+        people, and landscape.
       </p>
       <p>
-        I read almost everywhere: at home, in the office, in the car, 
-        on trains or planes—as long as I could stay awake. 
-        My favorite place to read is coffee shops: good coffee, a good book, no agenda. 
-        Before traveling somewhere, I would pick up a book about the place—its 
-        history, culture, people, and landscape.
+        I don’t confine myself to any particular genre. I’ve found great reads
+        in fiction, children’s literature, biography, memoir, history, politics,
+        religion, geography, business, economics, and plenty more.
       </p>
       <p>
-        I don’t confind to any particular genre. I’ve found great reads in fiction, 
-        children’s literature, biography, memoir, history, politics, religion, 
-        geography, business, economics, and plenty more.
-      </p>
-      <p>
-        For me, reading is leisure: it keeps my mind active, satisfies my curiosity, 
-        and offers the best way to relieve stress.
+        For me, reading is leisure: it keeps my mind active, satisfies my
+        curiosity, and offers the best way to relieve stress.
       </p>
       <p>
         This page is where I keep track of that journey:
-        {totalFinishedBooks} books over the last {totalYears} years.
+        {totalFinishedBooks}
+        books over the last {totalYears} years.
       </p>
       <blockquote>
         <p>
-          I bought a copy of Faulkner’s Light In August and went to the noisiest jazz café 
-          I could think of, reading my new book while listening to Ornette Coleman and 
-          Bud Powell and drinking my hot, thick, foul-tasting coffee. At five-thirty 
-          I closed my book, went outside, and ate a light supper. How many Sundays-
-          how many hundreds of Sundays like this-lay ahead of me? 
-          “Quiet, peaceful, and lonely,” I said aloud to myself. 
-          On Sundays, I didn’t wind my spring.
+          I bought a copy of Faulkner’s Light In August and went to the noisiest
+          jazz café I could think of, reading my new book while listening to
+          Ornette Coleman and Bud Powell and drinking my hot, thick,
+          foul-tasting coffee. At five-thirty I closed my book, went outside,
+          and ate a light supper. How many Sundays-how many hundreds of Sundays
+          like this-lay ahead of me? “Quiet, peaceful, and lonely,” I said aloud
+          to myself. On Sundays, I didn’t wind my spring.
         </p>
         <p>— Norwegian Wood, by Haruki Murakami</p>
       </blockquote>
@@ -84,7 +77,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
 
   <LibraryTabs tabs={tabs}>
     <div role="tabpanel" id="panel-favorites" aria-labelledby="tab-favorites">
-      <BookList books={favorites} showDescription />
+      <BookList books={library.favorites} showDescription />
     </div>
     <div
       role="tabpanel"
@@ -92,7 +85,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       aria-labelledby="tab-reading"
       hidden
     >
-      <BookList books={reading} showTags />
+      <BookList books={library.reading} showTags />
     </div>
     <div
       role="tabpanel"
@@ -101,7 +94,7 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       hidden
     >
       <LibraryTabs tabs={yearTabs} variant="pill">
-        {fullList.years.map(([year, books], i) => (
+        {library.years.map(([year, books], i) => (
           <div
             role="tabpanel"
             id={`panel-year-${year}`}
@@ -109,8 +102,9 @@ const yearTabs = fullList.years.map(([year, books]) => ({
             hidden={i > 0}
           >
             <LibraryStats books={books} />
-            <LibraryTagFilter books={books} />
-            <BookList books={books} showRating />
+            <LibraryTagFilter books={books}>
+              <BookList books={books} showRating filterable />
+            </LibraryTagFilter>
           </div>
         ))}
       </LibraryTabs>
@@ -121,10 +115,10 @@ const yearTabs = fullList.years.map(([year, books]) => ({
       aria-labelledby="tab-bucketlist"
       hidden
     >
-      <BookList books={fullList.bucketlist} showTags />
+      <BookList books={library.bucketlist} showTags />
     </div>
     <div role="tabpanel" id="panel-dnf" aria-labelledby="tab-dnf" hidden>
-      <BookList books={fullList.dnf} showTags />
+      <BookList books={library.dnf} showTags />
     </div>
   </LibraryTabs>
 </Layout>

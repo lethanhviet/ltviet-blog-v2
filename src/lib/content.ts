@@ -55,44 +55,29 @@ export async function getTags(): Promise<
 const byTitle = (a: CollectionEntry<"books">, b: CollectionEntry<"books">) =>
   a.data.title.localeCompare(b.data.title)
 
-let booksCache: Promise<CollectionEntry<"books">[]> | undefined
-
-function getBooks(): Promise<CollectionEntry<"books">[]> {
-  booksCache ??= getCollection("books")
-  return booksCache
-}
-
-export async function getFavoriteBooks(): Promise<CollectionEntry<"books">[]> {
-  const books = await getBooks()
-  return books
-    .filter((book) => book.data.favorite)
-    .sort(
-      (a, b) =>
-        (b.data.finished?.getTime() ?? 0) - (a.data.finished?.getTime() ?? 0),
-    )
-}
-
-export async function getCurrentlyReadingBooks(): Promise<
-  CollectionEntry<"books">[]
-> {
-  const books = await getBooks()
-  return books
-    .filter((book) => book.data.status === "reading")
-    .sort(
-      (a, b) =>
-        (b.data.started?.getTime() ?? 0) - (a.data.started?.getTime() ?? 0),
-    )
-}
-
-export type BookFullList = {
+export type LibraryBooks = {
+  favorites: CollectionEntry<"books">[]
+  reading: CollectionEntry<"books">[]
   bucketlist: CollectionEntry<"books">[]
   years: [number, CollectionEntry<"books">[]][]
   dnf: CollectionEntry<"books">[]
 }
 
-export async function getBookFullList(): Promise<BookFullList> {
-  const books = await getBooks()
+export async function getLibraryBooks(): Promise<LibraryBooks> {
+  const books = await getCollection("books")
 
+  const favorites = books
+    .filter((book) => book.data.favorite)
+    .sort(
+      (a, b) =>
+        (b.data.finished?.getTime() ?? 0) - (a.data.finished?.getTime() ?? 0),
+    )
+  const reading = books
+    .filter((book) => book.data.status === "reading")
+    .sort(
+      (a, b) =>
+        (b.data.started?.getTime() ?? 0) - (a.data.started?.getTime() ?? 0),
+    )
   const bucketlist = books
     .filter((book) => book.data.status === "bucketlist")
     .sort(byTitle)
@@ -101,9 +86,8 @@ export async function getBookFullList(): Promise<BookFullList> {
     (book) => book.data.status === "finished" && book.data.finished,
   )
 
-  const byYear = Map.groupBy(
-    finished,
-    (book) => book.data.finished!.getFullYear(),
+  const byYear = Map.groupBy(finished, (book) =>
+    book.data.finished!.getFullYear(),
   )
   const years: [number, CollectionEntry<"books">[]][] = [...byYear]
     .sort(([a], [b]) => b - a)
@@ -114,7 +98,7 @@ export async function getBookFullList(): Promise<BookFullList> {
       ),
     ])
 
-  return { bucketlist, years, dnf }
+  return { favorites, reading, bucketlist, years, dnf }
 }
 
 export async function getLatestNow(): Promise<

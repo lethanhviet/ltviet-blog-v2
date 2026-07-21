@@ -8,21 +8,29 @@ const { books } = Astro.props
 const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
 ---
 
-{tags.length > 0 && (
-  <library-tag-filter>
-    <button type="button" data-filter-tag="all" aria-pressed="true">
-      All
-    </button>
+<library-tag-filter>
+  <div
+    data-filters
+    role="group"
+    aria-label="Filter books by tag"
+    hidden={tags.length === 0}
+  >
+    <button type="button" data-filter-tag="all" aria-pressed="true">All</button>
     {tags.map((tag) => (
       <button type="button" data-filter-tag={tag} aria-pressed="false">
         {tag}
       </button>
     ))}
-  </library-tag-filter>
-)}
+  </div>
+  <slot />
+</library-tag-filter>
 
 <style>
   library-tag-filter {
+    display: block;
+  }
+
+  [data-filters] {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3xs);
@@ -53,29 +61,45 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
 
 <script>
   class LibraryTagFilter extends HTMLElement {
+    private controller?: AbortController
+
     connectedCallback() {
-      const buttons = [...this.querySelectorAll<HTMLButtonElement>("button")]
-      const panel = this.closest<HTMLElement>('[role="tabpanel"]')
-      const items = [...(panel?.querySelectorAll<HTMLLIElement>("ul > li") ?? [])]
+      this.controller?.abort()
+      this.controller = new AbortController()
+      const { signal } = this.controller
+      const buttons = [
+        ...this.querySelectorAll<HTMLButtonElement>(
+          ":scope > [data-filters] > button",
+        ),
+      ]
+      const items = [
+        ...this.querySelectorAll<HTMLLIElement>(":scope > ul > li[data-tags]"),
+      ]
 
       buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          buttons.forEach((b) =>
-            b.setAttribute("aria-pressed", String(b === button)),
-          )
-          const tag = button.dataset.filterTag
-          items.forEach((item) => {
-            if (tag === "all") {
-              item.hidden = false
-              return
-            }
-            const tags: string[] = JSON.parse(item.dataset.tags ?? "[]")
-            item.hidden = !tags.includes(tag ?? "")
-          })
-        })
+        button.addEventListener(
+          "click",
+          () => {
+            buttons.forEach((b) =>
+              b.setAttribute("aria-pressed", String(b === button)),
+            )
+            const tag = button.dataset.filterTag
+            items.forEach((item) => {
+              const tags: string[] = JSON.parse(item.dataset.tags ?? "[]")
+              item.hidden = tag !== "all" && !tags.includes(tag ?? "")
+            })
+          },
+          { signal },
+        )
       })
+    }
+
+    disconnectedCallback() {
+      this.controller?.abort()
     }
   }
 
-  customElements.define("library-tag-filter", LibraryTagFilter)
+  if (!customElements.get("library-tag-filter")) {
+    customElements.define("library-tag-filter", LibraryTagFilter)
+  }
 </script>
