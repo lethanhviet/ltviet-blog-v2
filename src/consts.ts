@@ -10,7 +10,7 @@ import Writing from "@/assets/icons/writing.svg"
 
 export const SITE = {
   title: "Viet\'s note",
-  description: "Industrial robotics integrator sharing notes on business, tech, economics, history, books, travel, and food—ideas, experiments, and rabbit holes.",
+  description: "Industrial system integrator sharing notes on business, tech, economics, history, books, travel, and food—ideas, experiments, and rabbit holes.",
   href: 'https://ltviet.com',
   author: 'ltviet',
   locale: "vi-VN",
