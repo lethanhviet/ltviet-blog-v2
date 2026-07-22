@@ -1,9 +1,9 @@
 ---
 import MetaPage from "@/components/MetaPage.astro"
-import NowIntro from "@/components/now/NowIntro.astro"
 import NowSnapshot from "@/components/now/NowSnapshot.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getLastUpdated, getLatestNow } from "@/lib/content"
+import { formatDate } from "@/lib/utils"
 
 const entry = await getLatestNow()
 const lastUpdated = getLastUpdated(entry?.filePath)
@@ -15,6 +15,33 @@ const lastUpdated = getLastUpdated(entry?.filePath)
     title="Now"
     description="A snapshot of what is occupying my time and attention right now."
   />
-  <NowIntro lastUpdated={lastUpdated} />
+  <section class="page-intro page-intro--spaced" aria-labelledby="now-title">
+    <h1 id="now-title" class="page-title">What I am <i>up to right now</i>.</h1>
+    <prose-content>
+      <p>A snapshot of what is occupying my time and attention.</p>
+    </prose-content>
+    {lastUpdated && (
+      <p class="now-intro__updated">
+        <span aria-hidden="true">&bull;</span>
+        Last updated
+        <time datetime={lastUpdated.toISOString()}>{formatDate(lastUpdated)}</time>
+      </p>
+    )}
+  </section>
   {entry && <NowSnapshot snapshot={entry.data} />}
 </Layout>
+
+<style>
+  .now-intro__updated {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-block-start: var(--space-s);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+
+    span {
+      color: var(--foreground);
+    }
+  }
+</style>
