@@ -1,29 +1,23 @@
 ---
 import type { WritingEntry } from "@/lib/content"
-import { formatDate, writingPath } from "@/lib/utils"
+import { writingPath } from "@/lib/utils"
 
-type Props = { post: WritingEntry }
+type Props = {
+  post: WritingEntry
+  year: number
+  showYear: boolean
+}
 
-const { post } = Astro.props
-const { title, description, date, tags = [] } = post.data
+const { post, year, showYear } = Astro.props
+const { title, tags = [] } = post.data
+const [tag] = tags
 ---
 
-<li>
+<li class="writing-row">
   <a href={writingPath(post.id)}>
-    <entry-heading>
-      <span data-title>{title}</span>
-      <entry-meta>
-        <time datetime={date.toISOString()}>{formatDate(date)}</time>
-        {tags.length > 0 && (
-            <entry-tags>
-              {tags.map((tag) => (
-                <span>#{tag}</span>
-              ))}
-            </entry-tags>
-          )}
-      </entry-meta>
-    </entry-heading>
-    <p>{description}</p>
+    <span class="writing-row__year">{showYear && year}</span>
+    <span class="writing-row__title">{title}</span>
+    {tag && <span class="writing-row__tags">#{tag}</span>}
   </a>
 </li>
 
@@ -33,64 +27,32 @@ const { title, description, date, tags = [] } = post.data
   }
 
   a {
-    display: block;
-    margin-inline: calc(-1 * var(--space-s));
-    padding: var(--space-2xs) var(--space-s);
-    border-radius: var(--radius-md);
-    text-decoration-line: none;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: var(--muted);
-    }
-  }
-
-  entry-heading {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: var(--content-column-width) 1fr auto;
     align-items: baseline;
-    gap: var(--space-2xs);
+    gap: var(--space-s);
+    padding-block: var(--space-2xs);
+    text-decoration-line: none;
 
     @media (width < 40rem) {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: var(--space-3xs);
-    }
-
-    [data-title] {
-      font-size: var(--step-1);
-      line-height: calc(var(--leading-offset) + 1em);
-      font-weight: var(--font-weight-medium);
-      color: var(--foreground);
-    }
-
-    entry-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
+      grid-template-columns: var(--content-column-width-sm) 1fr auto;
       gap: var(--space-2xs);
-    }
-
-    time {
-      flex-shrink: 0;
-      font-size: var(--step--1);
-      color: var(--muted-foreground);
-    }
-
-    entry-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-3xs);
-      font-size: var(--step--1);
-
-      span {
-        color: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
-      }
     }
   }
 
-  p {
-    margin-block-start: var(--space-3xs);
+  .writing-row__year {
+    font-size: var(--step--1);
     color: var(--muted-foreground);
+  }
+
+  .writing-row__title {
+    font-size: var(--step-0);
+    color: var(--foreground);
+  }
+
+  .writing-row__tags {
+    font-size: var(--step--1);
+    text-align: right;
+    color: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
   }
 </style>

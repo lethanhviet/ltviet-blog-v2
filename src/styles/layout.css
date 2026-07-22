@@ -21,17 +21,29 @@
 
   --grid-max-width: 75.94rem;
   --grid-gutter: var(--space-s-m);
-  --grid-columns: 10;
+  --grid-columns: 5;
   --grid-edge: max(
     var(--grid-gutter),
     (100% - var(--grid-max-width)) / 2 + var(--grid-gutter)
   );
+  /* 100vw (not 100%) so this resolves the same everywhere it's used,
+     regardless of how deeply nested or how narrow the consuming element's
+     own containing block is. */
   --grid-column-width: calc(
     (
-        min(100%, var(--grid-max-width)) -
+        min(100vw, var(--grid-max-width)) -
           (var(--grid-columns) + 1) * var(--grid-gutter)
       ) /
       var(--grid-columns)
+  );
+  /* A finer sub-grid scoped to the content column only. Unlike
+     --grid-column-width, this intentionally uses 100% (not 100vw): it's only
+     ever consumed by elements nested inside page-content, and should resolve
+     against *that* column's width, not the full page width. */
+  --content-columns: 9;
+  --content-column-width: calc(
+    (100% - (var(--content-columns) + 1) * var(--grid-gutter)) /
+      var(--content-columns)
   );
   --bar-gutter: max(var(--grid-gutter), (100% - var(--measure)) / 2);
   --bar-border-image: linear-gradient(
@@ -44,6 +56,12 @@
 
   --page-offset-top: var(--space-xl);
   --page-offset-bottom: var(--space-m);
+
+  /* Fallback for --content-column-width below 40rem, where the page grid has
+     already collapsed to a single column and the real grid math would
+     produce an unusably thin column for row-style list items (writing card,
+     book card, …). */
+  --content-column-width-sm: 2.5rem;
 }
 
 html {

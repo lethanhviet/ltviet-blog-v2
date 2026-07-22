@@ -5,22 +5,51 @@ import Layout from "@/layouts/Layout.astro"
 import { getPosts } from "@/lib/content"
 
 const posts = await getPosts()
+
+let lastYear: number | null = null
+const rows = posts.map((post) => {
+  const year = post.data.date.getUTCFullYear()
+  const showYear = year !== lastYear
+  lastYear = year
+  return { post, year, showYear }
+})
 ---
 
 <Layout>
   <MetaPage slot="head" title="Writing" />
-  <header class="page-intro">
+  <header class="page-intro page-intro--spaced">
     <h1 class="page-title">Writing</h1>
+    <prose-content>
+      <p>
+        This is a collection of my wandering thoughts—and my attempt to put them
+        into words. Hang tight!
+      </p>
+    </prose-content>
   </header>
-  <ul>
-    {posts.map((post) => <WritingCard post={post} />)}
+  <ul class="writing-list">
+    {rows.map(({ post, year, showYear }) => (
+      <WritingCard post={post} year={year} showYear={showYear} />
+    ))}
   </ul>
 </Layout>
 
-<style>
-  ul {
+<style is:global>
+  .writing-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3xs);
+  }
+
+  .writing-list .writing-row {
+    transition: opacity 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .writing-list:hover .writing-row {
+      opacity: 0.4;
+    }
+
+    .writing-list:hover .writing-row:hover {
+      opacity: 1;
+    }
   }
 </style>
