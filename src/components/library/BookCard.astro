@@ -31,6 +31,7 @@ const { title, author, cover, rating, tags, description } = book.data
     alt={`${title} cover`}
     width={64}
     height={96}
+    densities={[1, 2, 3]}
     loading={loading}
   />
   <book-heading>
@@ -61,7 +62,7 @@ const { title, author, cover, rating, tags, description } = book.data
 <style>
   li {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) max-content;
+    grid-template-columns: var(--content-column-width) minmax(0, 1fr) max-content;
     grid-template-areas: "cover heading meta";
     align-items: center;
     column-gap: var(--space-s);
@@ -80,13 +81,17 @@ const { title, author, cover, rating, tags, description } = book.data
         "cover heading meta"
         "cover description description";
     }
+
+    @media (width < 40rem) {
+      grid-template-columns: var(--content-column-width-sm) minmax(0, 1fr) max-content;
+    }
   }
 
   img {
     grid-area: cover;
     flex-shrink: 0;
-    inline-size: 2.75rem;
-    block-size: 4.125rem;
+    inline-size: 100%;
+    aspect-ratio: 2 / 3;
     object-fit: cover;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
