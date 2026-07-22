@@ -62,7 +62,9 @@ const { title, author, cover, rating, tags, description } = book.data
 <style>
   li {
     display: grid;
-    grid-template-columns: var(--content-column-width) minmax(0, 1fr) max-content;
+    grid-template-columns: calc(
+        2 * var(--content-column-width) + var(--grid-gutter)
+      ) minmax(0, 1fr) max-content;
     grid-template-areas: "cover heading meta";
     align-items: center;
     column-gap: var(--space-s);
