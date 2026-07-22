@@ -1,6 +1,6 @@
 ---
 import MetaPage from "@/components/MetaPage.astro"
-import WritingCard from "@/components/writing/WritingCard.astro"
+import PostCard from "@/components/writing/PostCard.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getTags, type WritingEntry } from "@/lib/content"
 
@@ -25,7 +25,7 @@ const { tag, posts } = Astro.props
     noindex
   />
   <ul>
-    {posts.map((post) => <WritingCard post={post} />)}
+    {posts.map((post) => <PostCard post={post} />)}
   </ul>
 </Layout>
 
