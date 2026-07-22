@@ -1,6 +1,6 @@
 ---
-title: 'Download Sách Trên Hệ Thống OverDrive'
-description: Overdrive - hệ thống thư viện điện tử lớn nhất thế giới và cách sử dụng overdrive để download miễn phí e-book, audiobook...
+title: "Download Sách Trên Hệ Thống OverDrive"
+description: "Overdrive - hệ thống thư viện điện tử lớn nhất thế giới và cách sử dụng overdrive để download miễn phí e-book, audiobook..."
 date: 2024-01-01
 tags: ['App', 'Reading']
 image: ./banner.png
@@ -33,11 +33,13 @@ Hiện tại mình đang sử dụng thẻ thư viện của Boston Public Libra
 Việc đăng ký thẻ BPL cũng khá đơn giản (link), đặc biệt là trong thời gian hơn 1 năm trở lại đây do Covid-19, khi các thư viện không thể mở cửa đón khách. Các thư viện ở Mỹ đã đẩy mạnh hơn việc khuyến khích người dùng sử dụng các hệ thống mượn sách online như OverDrive. Chỉ cần một trick nhỏ, kể cả khi không sinh sống ở Mỹ, chúng ta vẫn có thể đăng ký / renew đc thẻ BPL.
 
 ## Các điểm gì cần chú ý khi mượn sách trên OverDrive?
+
 Việc mượn sách trên OverDrive cũng giống như cách chúng ta mượn sách ngoài thư viện. Chúng ta tuân thủ một số quy tắc:
-– First come first serve: hệ thống thư viện có giới hạn số lượng (copies) cho mỗi title sách, ai đăng ký trước sẽ được mượn trước, và nếu hết số lượng giới hạn, chúng ta sẽ được đưa vào danh sách chờ (Place a hold). Hệ thống OverDrive sẽ thông báo thời gian chờ dự tính (wait time). Nếu chúng ta quyết định chọn vào danh sách chờ, hệ thống OverDrive sẽ yêu cầu nhập email để gửi thông báo khi sách trở thành available.
-— Tip: để giảm thời gian chờ đợi, chúng ta có thể Place hold ở nhiều hệ thống thư viện khác nhau >>> chỉ riêng thẻ BPL đã hỗ trợ truy cập và mượn tại 8 hệ thống thư viện trên OverDrive!
-– Giới hạn thời gian được mượn sách: Tùy theo hệ thống thư viện, sách sẽ có giới hạn về thời gian được mượn khác nhau. Thông thường là 14-21 ngày cho e-book và 7-14 ngày cho audio book / video. Sắp đến ngày kết thúc hạn, OverDrive cho phép chúng ta được gia hạn mượn. Kết thúc thời hạn mượn, sách sẽ tự động được trả lại cho thư viện để cho những người tiếp theo có thể mượn. Link sách trong app sẽ bị vô hiệu (expired), chúng ta sẽ không mở được nó nữa.
-– Giới hạn số lượng sách được mượn: Tùy theo hệ thống thư viện, ta có thể mượn tối đa đc 10-20 e-book tại 1 thời điểm.
+
+- First come first serve: hệ thống thư viện có giới hạn số lượng (copies) cho mỗi title sách, ai đăng ký trước sẽ được mượn trước, và nếu hết số lượng giới hạn, chúng ta sẽ được đưa vào danh sách chờ (Place a hold). Hệ thống OverDrive sẽ thông báo thời gian chờ dự tính (wait time). Nếu chúng ta quyết định chọn vào danh sách chờ, hệ thống OverDrive sẽ yêu cầu nhập email để gửi thông báo khi sách trở thành available.
+- Tip: để giảm thời gian chờ đợi, chúng ta có thể Place hold ở nhiều hệ thống thư viện khác nhau >>> chỉ riêng thẻ BPL đã hỗ trợ truy cập và mượn tại 8 hệ thống thư viện trên OverDrive!
+- Giới hạn thời gian được mượn sách: Tùy theo hệ thống thư viện, sách sẽ có giới hạn về thời gian được mượn khác nhau. Thông thường là 14-21 ngày cho e-book và 7-14 ngày cho audio book / video. Sắp đến ngày kết thúc hạn, OverDrive cho phép chúng ta được gia hạn mượn. Kết thúc thời hạn mượn, sách sẽ tự động được trả lại cho thư viện để cho những người tiếp theo có thể mượn. Link sách trong app sẽ bị vô hiệu (expired), chúng ta sẽ không mở được nó nữa.
+- Giới hạn số lượng sách được mượn: Tùy theo hệ thống thư viện, ta có thể mượn tối đa đc 10-20 e-book tại 1 thời điểm.
 
 Việc sử dụng OverDrive rất giống với việc mượn sách tại các thư viện, nhưng đối với Việt, mình thấy OverDrive có một ưu điểm vượt trội, đó là mình ko còn bị xảy ra tình trạng trả sách trễ và bị phạt tiền overdue (!).
 
