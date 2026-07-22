@@ -2,27 +2,27 @@
 import ArrowLeft from "@/assets/icons/arrow-left.svg"
 import ArrowRight from "@/assets/icons/arrow-right.svg"
 import ScrollToTop from "@/components/ScrollToTop.astro"
-import type { CollectionEntry } from "astro:content"
+import type { WritingEntry } from "@/lib/content"
+import { writingPath } from "@/lib/utils"
 
-type Post = CollectionEntry<"writing">
-type Props = { prev?: Post; next?: Post }
+type Props = { previous?: WritingEntry; next?: WritingEntry }
 
-const { prev, next } = Astro.props
+const { previous, next } = Astro.props
 ---
 
 <post-actions>
   <a
-    href={prev && `/writing/${prev.id}`}
+    href={previous && writingPath(previous.id)}
     data-icon-button
     data-dir="prev"
-    aria-label={prev && `Previous post: ${prev.data.title}`}
-    aria-hidden={!prev || undefined}
-    title={prev?.data.title}
+    aria-label={previous && `Previous post: ${previous.data.title}`}
+    aria-hidden={!previous || undefined}
+    title={previous?.data.title}
   >
     <ArrowLeft />
   </a>
   <a
-    href={next && `/writing/${next.id}`}
+    href={next && writingPath(next.id)}
     data-icon-button
     data-dir="next"
     aria-label={next && `Next post: ${next.data.title}`}

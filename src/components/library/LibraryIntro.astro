@@ -7,8 +7,10 @@ type Props = {
 const { totalFinishedBooks, totalYears } = Astro.props
 ---
 
-<section class="library-intro" aria-labelledby="library-title">
-  <h1 id="library-title">Too many books, too little time...</h1>
+<section class="page-intro page-intro--spaced" aria-labelledby="library-title">
+  <h1 id="library-title" class="page-title">
+    Too many books, too little time...
+  </h1>
   <prose-content>
     <p>I enjoy reading—though that may be an understatement.</p>
     <p>
@@ -46,21 +48,3 @@ const { totalFinishedBooks, totalYears } = Astro.props
     </blockquote>
   </prose-content>
 </section>
-
-<style>
-  .library-intro {
-    margin-block-end: var(--space-l);
-
-    @media (width >= 64rem) {
-      margin-block-start: -0.2em;
-    }
-  }
-
-  h1 {
-    margin-block-end: var(--space-m);
-    color: var(--foreground);
-    font-size: var(--step-3);
-    font-weight: var(--font-weight-medium);
-    line-height: calc(var(--leading-offset) + 1em);
-  }
-</style>

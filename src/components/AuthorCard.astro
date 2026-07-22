@@ -5,11 +5,11 @@ import Globe from "@/assets/icons/globe.svg"
 import Link from "@/assets/icons/link.svg"
 import Twitter from "@/assets/icons/twitter.svg"
 import SocialIcons from "@/components/SocialIcons.astro"
+import type { AuthorEntry } from "@/lib/content"
 import { normalizePath } from "@/lib/utils"
 import type { SvgComponent } from "astro/types"
-import type { CollectionEntry } from "astro:content"
 
-type Props = { author: CollectionEntry<"authors"> }
+type Props = { author: AuthorEntry }
 
 const { author } = Astro.props
 const { name, pronouns, avatar, bio, mail, socials } = author.data

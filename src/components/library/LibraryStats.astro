@@ -1,7 +1,7 @@
 ---
-import type { CollectionEntry } from "astro:content"
+import type { BookEntry } from "@/lib/content"
 
-type Props = { books: CollectionEntry<"books">[] }
+type Props = { books: BookEntry[] }
 
 const { books } = Astro.props
 

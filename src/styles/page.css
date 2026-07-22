@@ -1,0 +1,17 @@
+.page-intro {
+  @media (width >= 64rem) {
+    margin-block-start: -0.2em;
+  }
+}
+
+.page-intro--spaced {
+  margin-block-end: var(--space-l);
+}
+
+.page-title {
+  margin-block-end: var(--space-m);
+  color: var(--foreground);
+  font-size: var(--step-3);
+  font-weight: var(--font-weight-medium);
+  line-height: calc(var(--leading-offset) + 1em);
+}

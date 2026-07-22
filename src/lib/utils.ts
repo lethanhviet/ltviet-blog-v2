@@ -13,6 +13,8 @@ export const isSubpost = (id: string) => id.includes("/")
 
 export const subpostSlug = (id: string) => id.split("/")[1]
 
+export const writingPath = (id: string) => `/writing/${id}`
+
 export const normalizePath = (pathname: string) => {
   try {
     return decodeURIComponent(pathname).replace(/\/+$/, "")

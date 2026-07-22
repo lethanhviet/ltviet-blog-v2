@@ -1,9 +1,8 @@
 ---
-import WritingCard from "@/components/WritingCard.astro"
 import MetaPage from "@/components/MetaPage.astro"
+import WritingCard from "@/components/writing/WritingCard.astro"
 import Layout from "@/layouts/Layout.astro"
-import { getTags } from "@/lib/content"
-import type { CollectionEntry } from "astro:content"
+import { getTags, type WritingEntry } from "@/lib/content"
 
 export async function getStaticPaths() {
   const tags = await getTags()
@@ -13,7 +12,7 @@ export async function getStaticPaths() {
   }))
 }
 
-type Props = { tag: string; posts: CollectionEntry<"writing">[] }
+type Props = { tag: string; posts: WritingEntry[] }
 
 const { tag, posts } = Astro.props
 ---

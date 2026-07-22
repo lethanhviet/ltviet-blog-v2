@@ -1,30 +1,29 @@
 ---
-import { formatDate } from "@/lib/utils"
-import type { CollectionEntry } from "astro:content"
+import type { WritingEntry } from "@/lib/content"
+import { formatDate, writingPath } from "@/lib/utils"
 
-type Props = { post: CollectionEntry<"writing"> }
+type Props = { post: WritingEntry }
 
 const { post } = Astro.props
+const { title, description, date, tags = [] } = post.data
 ---
 
 <li>
-  <a href={`/writing/${post.id}`}>
+  <a href={writingPath(post.id)}>
     <entry-heading>
-      <span data-title>{post.data.title}</span>
+      <span data-title>{title}</span>
       <entry-meta>
-        <time datetime={post.data.date.toISOString()}
-          >{formatDate(post.data.date)}</time
-        >
-        {post.data.tags && (
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {tags.length > 0 && (
             <entry-tags>
-              {post.data.tags.map((tag) => (
+              {tags.map((tag) => (
                 <span>#{tag}</span>
               ))}
             </entry-tags>
           )}
       </entry-meta>
     </entry-heading>
-    <p>{post.data.description}</p>
+    <p>{description}</p>
   </a>
 </li>
 

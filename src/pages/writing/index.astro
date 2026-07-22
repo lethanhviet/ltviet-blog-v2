@@ -1,6 +1,6 @@
 ---
-import WritingCard from "@/components/WritingCard.astro"
 import MetaPage from "@/components/MetaPage.astro"
+import WritingCard from "@/components/writing/WritingCard.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts } from "@/lib/content"
 
@@ -9,31 +9,15 @@ const posts = await getPosts()
 
 <Layout>
   <MetaPage slot="head" title="Writing" />
-  <writing-intro>
-    <h1>Writing</h1>
-  </writing-intro>
+  <header class="page-intro">
+    <h1 class="page-title">Writing</h1>
+  </header>
   <ul>
     {posts.map((post) => <WritingCard post={post} />)}
   </ul>
 </Layout>
 
 <style>
-  writing-intro {
-    display: block;
-
-    @media (width >= 64rem) {
-      margin-block-start: -0.2em;
-    }
-
-    h1 {
-      font-size: var(--step-3);
-      line-height: calc(var(--leading-offset) + 1em);
-      font-weight: var(--font-weight-medium);
-      color: var(--foreground);
-      margin-block-end: var(--space-m);
-    }
-  }
-
   ul {
     display: flex;
     flex-direction: column;

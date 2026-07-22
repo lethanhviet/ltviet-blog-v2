@@ -1,21 +1,29 @@
-import { SITE } from "@/consts"
-import { getCollection, type CollectionEntry } from "astro:content"
 import { isSubpost } from "@/lib/utils"
+import { getCollection, type CollectionEntry } from "astro:content"
 import { execFileSync } from "node:child_process"
 import { statSync } from "node:fs"
 
-export const pageTitle = (title: string) => `${SITE.title} · ${title}`
+export type WritingEntry = CollectionEntry<"writing">
+export type AuthorEntry = CollectionEntry<"authors">
+export type BookEntry = CollectionEntry<"books">
+export type NowEntry = CollectionEntry<"now">
+export type NowSnapshot = NowEntry["data"]
 
-export async function getPosts(): Promise<CollectionEntry<"writing">[]> {
+export type WritingPageProps = {
+  post: WritingEntry
+  chain: WritingEntry[]
+  previous?: WritingEntry
+  next?: WritingEntry
+}
+
+export async function getPosts(): Promise<WritingEntry[]> {
   const posts = await getCollection("writing", ({ data }) => !data.draft)
   return posts
     .filter((post) => !isSubpost(post.id))
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 }
 
-export async function getSubposts(): Promise<
-  Map<string, CollectionEntry<"writing">[]>
-> {
+export async function getSubposts(): Promise<Map<string, WritingEntry[]>> {
   const posts = await getCollection(
     "writing",
     ({ id, data }) => !data.draft && id.split("/").length === 2,
@@ -28,12 +36,28 @@ export async function getSubposts(): Promise<
   return Map.groupBy(posts, (post) => post.id.split("/")[0])
 }
 
-export async function getTags(): Promise<
-  Map<string, CollectionEntry<"writing">[]>
-> {
+export async function getWritingPagePaths() {
+  const [posts, subposts] = await Promise.all([getPosts(), getSubposts()])
+
+  return posts.flatMap((parent, index) => {
+    const chain = [parent, ...(subposts.get(parent.id) ?? [])]
+    const props: Omit<WritingPageProps, "post"> = {
+      chain,
+      previous: posts[index + 1],
+      next: posts[index - 1],
+    }
+
+    return chain.map((post) => ({
+      params: { id: post.id },
+      props: { ...props, post },
+    }))
+  })
+}
+
+export async function getTags(): Promise<Map<string, WritingEntry[]>> {
   const posts = await getPosts()
   const series = await getSubposts()
-  const tags = new Map<string, CollectionEntry<"writing">[]>()
+  const tags = new Map<string, WritingEntry[]>()
   for (const post of posts) {
     const chain = [post, ...(series.get(post.id) ?? [])]
     for (const tag of new Set(
@@ -52,15 +76,15 @@ export async function getTags(): Promise<
   )
 }
 
-const byTitle = (a: CollectionEntry<"books">, b: CollectionEntry<"books">) =>
+const byTitle = (a: BookEntry, b: BookEntry) =>
   a.data.title.localeCompare(b.data.title)
 
 export type LibraryBooks = {
-  favorites: CollectionEntry<"books">[]
-  reading: CollectionEntry<"books">[]
-  bucketlist: CollectionEntry<"books">[]
-  years: [number, CollectionEntry<"books">[]][]
-  dnf: CollectionEntry<"books">[]
+  favorites: BookEntry[]
+  reading: BookEntry[]
+  bucketlist: BookEntry[]
+  years: [number, BookEntry[]][]
+  dnf: BookEntry[]
 }
 
 export async function getLibraryBooks(): Promise<LibraryBooks> {
@@ -89,7 +113,7 @@ export async function getLibraryBooks(): Promise<LibraryBooks> {
   const byYear = Map.groupBy(finished, (book) =>
     book.data.finished!.getFullYear(),
   )
-  const years: [number, CollectionEntry<"books">[]][] = [...byYear]
+  const years: [number, BookEntry[]][] = [...byYear]
     .sort(([a], [b]) => b - a)
     .map(([year, entries]) => [
       year,
@@ -101,11 +125,9 @@ export async function getLibraryBooks(): Promise<LibraryBooks> {
   return { favorites, reading, bucketlist, years, dnf }
 }
 
-export async function getLatestNow(): Promise<
-  CollectionEntry<"now"> | undefined
-> {
+export async function getLatestNow(): Promise<NowEntry | undefined> {
   const entries = await getCollection("now")
-  return entries.reduce<CollectionEntry<"now"> | undefined>(
+  return entries.reduce<NowEntry | undefined>(
     (latest, entry) =>
       !latest || entry.id.localeCompare(latest.id) > 0 ? entry : latest,
     undefined,

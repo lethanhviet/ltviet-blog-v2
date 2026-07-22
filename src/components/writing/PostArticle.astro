@@ -1,0 +1,83 @@
+---
+import type { WritingEntry } from "@/lib/content"
+import { pageTitle } from "@/consts"
+import { formatDate, subpostSlug, writingPath } from "@/lib/utils"
+import { Image } from "astro:assets"
+import { render } from "astro:content"
+
+type Props = {
+  post: WritingEntry
+  embedded?: boolean
+  priority?: boolean
+}
+
+const { post, embedded = false, priority = false } = Astro.props
+const { Content } = await render(post)
+const { title, date, image } = post.data
+---
+
+<article
+  id={embedded ? subpostSlug(post.id) : undefined}
+  data-url={writingPath(post.id)}
+  data-title={pageTitle(title)}
+  data-embedded={embedded || undefined}
+>
+  <header>
+    <h1>{title}</h1>
+    <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  </header>
+  {image && (
+      <post-banner>
+        <Image
+          src={image}
+          alt={title}
+          width={1200}
+          height={630}
+          priority={priority || undefined}
+        />
+      </post-banner>
+    )}
+  <prose-content>
+    <Content />
+  </prose-content>
+</article>
+
+<style>
+  article[data-embedded] {
+    margin-block-start: var(--space-xl);
+    padding-block-start: var(--space-xl);
+    border-block-start: 2px solid var(--border);
+    scroll-margin-block-start: calc(-2px - 0.2 * var(--step-2));
+
+    header h1 {
+      font-size: var(--step-2);
+    }
+  }
+
+  header {
+    margin-block-end: var(--space-m);
+
+    h1 {
+      font-size: var(--step-3);
+      line-height: calc(var(--leading-offset) + 1em);
+      font-weight: var(--font-weight-medium);
+    }
+
+    time {
+      display: block;
+      margin-block-start: var(--space-3xs);
+      font-size: var(--step--1);
+      color: var(--muted-foreground);
+    }
+  }
+
+  post-banner {
+    display: block;
+    margin-block-end: var(--space-m);
+
+    :global(img) {
+      inline-size: 100%;
+      block-size: auto;
+    }
+  }
+</style>

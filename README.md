@@ -59,7 +59,6 @@ Below are some fantastic examples of websites based on this template. If you wis
 - [Expressive Code](https://expressive-code.com/) for code blocks and inline code, with `` `code{:lang}` `` annotations and TextMate scope highlighting.
 - $\LaTeX$ math rendered to browser-native and lightweight [MathML](https://developer.mozilla.org/en-US/docs/Web/MathML) via [Temml](https://temml.org/).
 - Subposts for organizing series, rendered as one continuous scrollable document.
-- A fully responsive table of contents with active scrollspy highlighting.
 - Clickable heading anchors for permalinking to any section.
 - GitHub-style callouts/alerts via `:::` directives.
 - SEO optimization with granular metadata and [Open Graph](https://ogp.me/) tag control for each post.
@@ -252,34 +251,6 @@ The author schema is defined as follows:
 | `bio`      | `string`                                   | n/a                                                                                                                                                                      | Optional |
 | `mail`     | `email()`                                  | Must be a valid email address.                                                                                                                                           | Optional |
 | `socials`  | `record(string, url())`                    | A map of any label you like to a valid URL. Each label is matched to an icon in `src/components/SocialIcons.astro`.                                                      | Optional |
-
-### Projects
-
-Add projects in `src/content/projects/` as Markdown files:
-
-```yml
----
-name: "Project A"
-description: "This is an example project description! You should replace this with a description of your own project."
-tags: ["Framework A", "Library B", "Tool C", "Resource D"]
-image: "./placeholder.png"
-link: "https://example.com"
-startDate: "2024-01-01"
-endDate: "2024-02-01"
----
-```
-
-The project schema is defined as follows:
-
-| Field         | Type (Zod)      | Requirements                            | Required |
-| ------------- | --------------- | --------------------------------------- | -------- |
-| `name`        | `string`        | n/a                                     | Yes      |
-| `description` | `string`        | n/a                                     | Yes      |
-| `link`        | `url()`         | Must be a valid URL.                    | Yes      |
-| `tags`        | `string[]`      | n/a                                     | Optional |
-| `image`       | `image()`       | Should be exactly 1200px &times; 630px. | Optional |
-| `startDate`   | `coerce.date()` | Must be in `YYYY-MM-DD` format.         | Optional |
-| `endDate`     | `coerce.date()` | Must be in `YYYY-MM-DD` format.         | Optional |
 
 ## License
 

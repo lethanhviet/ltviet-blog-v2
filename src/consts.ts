@@ -20,6 +20,8 @@ export const SITE = {
   defaultPostImage: "/static/1200x630.png",
 } as const
 
+export const pageTitle = (title: string) => `${SITE.title} · ${title}`
+
 export type NavItem = {
   href: string
   label: string

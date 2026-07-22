@@ -2,7 +2,7 @@
 import Greeting from "@/components/home/Greeting.astro"
 ---
 
-<section class="home-intro" aria-labelledby="home-greeting">
+<section class="page-intro" aria-labelledby="home-greeting">
   <Greeting />
   <prose-content>
     <p>I'm Viet. 👋</p>
@@ -32,11 +32,3 @@ import Greeting from "@/components/home/Greeting.astro"
     </p>
   </prose-content>
 </section>
-
-<style>
-  .home-intro {
-    @media (width >= 64rem) {
-      margin-block-start: -0.2em;
-    }
-  }
-</style>

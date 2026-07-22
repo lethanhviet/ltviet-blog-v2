@@ -1,9 +1,9 @@
 ---
 import BookCard from "@/components/library/BookCard.astro"
-import type { CollectionEntry } from "astro:content"
+import type { BookEntry } from "@/lib/content"
 
 type Props = {
-  books: CollectionEntry<"books">[]
+  books: BookEntry[]
   showTags?: boolean
   showRating?: boolean
   showDescription?: boolean

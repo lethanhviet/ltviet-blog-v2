@@ -4,10 +4,8 @@ import Heart from "@/assets/icons/heart.svg"
 import Library from "@/assets/icons/library.svg"
 import Plane from "@/assets/icons/plane.svg"
 import NowSection from "@/components/now/NowSection.astro"
-import type { CollectionEntry } from "astro:content"
+import type { NowSnapshot } from "@/lib/content"
 import type { SvgComponent } from "astro/types"
-
-type NowSnapshot = CollectionEntry<"now">["data"]
 
 type Props = {
   snapshot: NowSnapshot

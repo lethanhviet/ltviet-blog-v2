@@ -88,10 +88,10 @@ const now = defineCollection({
       interest: z.array(z.string()).default([]),
       travel: z.array(z.string()).default([]),
     })
-    .refine(
-      (data) => Object.values(data).some((items) => items.length > 0),
-      { message: "A now entry needs at least one item in work, read, interest, or travel" },
-    ),
+    .refine((data) => Object.values(data).some((items) => items.length > 0), {
+      message:
+        "A now entry needs at least one item in work, read, interest, or travel",
+    }),
 })
 
 export const collections = { writing, authors, books, now }

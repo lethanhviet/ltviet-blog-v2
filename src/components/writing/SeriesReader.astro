@@ -20,18 +20,6 @@
     ...document.querySelectorAll<HTMLElement>("article[data-url]"),
   ]
 
-  const list = document.querySelector("page-nav nav ul ul")
-  const parentLink = list?.querySelector("a")
-  let crumb = list?.querySelector<HTMLElement>('li[data-depth="1"]')
-  if (list && !crumb) {
-    crumb = document.createElement("li")
-    crumb.dataset.depth = "1"
-    crumb.hidden = true
-    crumb.append(document.createElement("a"))
-    list.append(crumb)
-  }
-  const crumbLink = crumb?.querySelector("a")
-
   const hashTarget = (hash: string) => {
     try {
       return document.getElementById(hashId(hash))
@@ -50,28 +38,11 @@
     return link.hash ? (hashTarget(link.hash) ?? article) : article
   }
 
-  const syncCrumb = (article: HTMLElement) => {
-    if (!crumb || !crumbLink || !parentLink) return
-    if (article === articles[0]) {
-      crumb.hidden = true
-      crumbLink.removeAttribute("aria-current")
-      parentLink.setAttribute("aria-current", "page")
-    } else {
-      crumb.hidden = false
-      crumbLink.href = article.dataset.url ?? ""
-      crumbLink.textContent =
-        article.querySelector("header h1")?.textContent ?? ""
-      crumbLink.setAttribute("aria-current", "page")
-      parentLink.removeAttribute("aria-current")
-    }
-  }
-
   const sync = (article: HTMLElement, hash = "") => {
     const { url, title } = article.dataset
     if (!url) return
     history.replaceState(history.state, "", url + hash)
     if (title) document.title = title
-    syncCrumb(article)
   }
 
   document.addEventListener("click", (event) => {

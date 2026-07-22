@@ -8,8 +8,8 @@ type Props = {
 const { lastUpdated } = Astro.props
 ---
 
-<section class="now-intro" aria-labelledby="now-title">
-  <h1 id="now-title">What I am <i>up to right now</i>.</h1>
+<section class="page-intro page-intro--spaced" aria-labelledby="now-title">
+  <h1 id="now-title" class="page-title">What I am <i>up to right now</i>.</h1>
   <prose-content>
     <p>A snapshot of what is occupying my time and attention.</p>
   </prose-content>
@@ -23,22 +23,6 @@ const { lastUpdated } = Astro.props
 </section>
 
 <style>
-  .now-intro {
-    margin-block-end: var(--space-l);
-
-    @media (width >= 64rem) {
-      margin-block-start: -0.2em;
-    }
-  }
-
-  h1 {
-    margin-block-end: var(--space-m);
-    color: var(--foreground);
-    font-size: var(--step-3);
-    font-weight: var(--font-weight-medium);
-    line-height: calc(var(--leading-offset) + 1em);
-  }
-
   .now-intro__updated {
     display: flex;
     align-items: center;
