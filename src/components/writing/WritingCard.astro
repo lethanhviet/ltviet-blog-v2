@@ -28,7 +28,9 @@ const [tag] = tags
 
   a {
     display: grid;
-    grid-template-columns: var(--content-column-width) 1fr auto;
+    grid-template-columns: calc(
+        2 * var(--content-column-width) + var(--grid-gutter)
+      ) 1fr auto;
     align-items: baseline;
     gap: var(--space-s);
     padding-block: var(--space-2xs);

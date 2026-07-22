@@ -40,7 +40,7 @@
      --grid-column-width, this intentionally uses 100% (not 100vw): it's only
      ever consumed by elements nested inside page-content, and should resolve
      against *that* column's width, not the full page width. */
-  --content-columns: 9;
+  --content-columns: 16;
   --content-column-width: calc(
     (100% - (var(--content-columns) + 1) * var(--grid-gutter)) /
       var(--content-columns)
