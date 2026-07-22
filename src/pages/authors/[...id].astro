@@ -1,7 +1,7 @@
 ---
 import AuthorCard from "@/components/AuthorCard.astro"
 import MetaPage from "@/components/MetaPage.astro"
-import WritingCard from "@/components/writing/WritingCard.astro"
+import PostCard from "@/components/writing/PostCard.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts, type AuthorEntry } from "@/lib/content"
 import { getCollection } from "astro:content"
@@ -36,7 +36,7 @@ const posts = (await getPosts()).filter((post) =>
     <h2>Posts</h2>
     {posts.length > 0 ? (
         <ul>
-          {posts.map((post) => <WritingCard post={post} />)}
+          {posts.map((post) => <PostCard post={post} />)}
         </ul>
       ) : (
         <p>No posts yet.</p>

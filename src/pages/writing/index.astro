@@ -1,6 +1,6 @@
 ---
 import MetaPage from "@/components/MetaPage.astro"
-import WritingCard from "@/components/writing/WritingCard.astro"
+import PostCard from "@/components/writing/PostCard.astro"
 import Layout from "@/layouts/Layout.astro"
 import { getPosts } from "@/lib/content"
 
@@ -28,7 +28,7 @@ const rows = posts.map((post) => {
   </header>
   <ul class="writing-list">
     {rows.map(({ post, year, showYear }) => (
-      <WritingCard post={post} year={year} showYear={showYear} />
+      <PostCard post={post} year={year} showYear={showYear} />
     ))}
   </ul>
 </Layout>
