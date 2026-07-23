@@ -27,6 +27,7 @@ export type NavItem = {
   label: string
   icon: SvgComponent
   external?: boolean
+  activePrefixes?: readonly string[]
 }
 
 export type NavGroup = {
@@ -40,7 +41,12 @@ export const NAV_GROUPS = [
       { href: "/", label: "Home", icon: Home },
       { href: "/writing", label: "Writing", icon: Writing },
       { href: "/now", label: "Now", icon: Clock },
-      { href: "/library", label: "Library", icon: Library },
+      {
+        href: "/library",
+        label: "Library",
+        icon: Library,
+        activePrefixes: ["/books"],
+      },
     ],
   },
   {

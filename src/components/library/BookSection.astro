@@ -1,0 +1,47 @@
+---
+import { renderInline } from "@/lib/utils"
+
+type Props = {
+  title: string
+  items: string[]
+  emptyText: string
+  as?: "list" | "paragraphs"
+}
+
+const { title, items, emptyText, as = "list" } = Astro.props
+---
+
+<section>
+  <h2>{title}</h2>
+  {items.length > 0 ? (
+    <prose-content>
+      {as === "list" ? (
+        <ul>
+          {items.map((item) => <li set:html={renderInline(item)} />)}
+        </ul>
+      ) : (
+        items.map((item) => <p set:html={renderInline(item)} />)
+      )}
+    </prose-content>
+  ) : (
+    <book-empty>{emptyText}</book-empty>
+  )}
+</section>
+
+<style>
+  section {
+    margin-block-end: var(--space-xl);
+  }
+
+  h2 {
+    font-size: var(--step-1);
+    font-weight: var(--font-weight-medium);
+    margin-block-end: var(--space-s);
+  }
+
+  book-empty {
+    display: block;
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+</style>

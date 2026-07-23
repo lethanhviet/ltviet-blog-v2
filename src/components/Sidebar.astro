@@ -8,10 +8,15 @@ import { normalizePath } from "@/lib/utils"
 
 const pathname = normalizePath(Astro.url.pathname) || "/"
 
-const isActive = ({ external, href }: NavItem) => {
+const matchesPath = (path: string, target: string) =>
+  target === "/"
+    ? path === target
+    : path === target || path.startsWith(`${target}/`)
+
+const isActive = ({ external, href, activePrefixes }: NavItem) => {
   if (external) return false
-  if (href === "/") return pathname === href
-  return pathname === href || pathname.startsWith(`${href}/`)
+  if (matchesPath(pathname, href)) return true
+  return (activePrefixes ?? []).some((prefix) => matchesPath(pathname, prefix))
 }
 ---
 

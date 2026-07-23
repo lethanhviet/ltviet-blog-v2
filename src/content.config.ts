@@ -45,7 +45,6 @@ const books = defineCollection({
       title: z.string(),
       author: z.string(),
       cover: image(),
-      rating: z.number().min(0).max(5).default(0),
       favorite: z.boolean().default(false),
       description: z.string(),
       tags: z.array(z.string()).optional(),
@@ -66,6 +65,7 @@ const books = defineCollection({
         status: z.literal("finished"),
         started: z.coerce.date().optional(),
         finished: z.coerce.date(),
+        rating: z.number().min(0).max(5),
       }),
       book.extend({
         status: z.literal("dnf"),
