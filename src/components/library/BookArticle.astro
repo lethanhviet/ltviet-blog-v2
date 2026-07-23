@@ -94,6 +94,11 @@ const sections = parseBookSections(book.body)
     margin-block-start: calc(0.5 * var(--leading-offset));
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
+
+    @media (width < 40rem) {
+      inline-size: 60%;
+      margin-inline: auto;
+    }
   }
 
   h1 {
@@ -165,9 +170,7 @@ const sections = parseBookSections(book.body)
     }
 
     @media (width < 40rem) {
-      span:nth-child(n + 3) {
-        display: none;
-      }
+      display: none;
     }
   }
 
