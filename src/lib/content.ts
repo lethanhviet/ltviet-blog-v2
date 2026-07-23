@@ -125,6 +125,48 @@ export async function getLibraryBooks(): Promise<LibraryBooks> {
   return { favorites, reading, bucketlist, years, dnf }
 }
 
+export async function getBookPagePaths() {
+  const books = await getCollection("books")
+  return books.map((book) => ({
+    params: { id: book.id },
+    props: { book },
+  }))
+}
+
+export type BookSections = {
+  keyTakeaways: string[]
+  highlights: string[]
+  referencedIn: string[]
+}
+
+const HEADING_TO_SECTION: Record<string, keyof BookSections> = {
+  "key takeaways": "keyTakeaways",
+  highlights: "highlights",
+  "referenced in": "referencedIn",
+}
+
+export function parseBookSections(body?: string): BookSections {
+  const sections: BookSections = {
+    keyTakeaways: [],
+    highlights: [],
+    referencedIn: [],
+  }
+
+  let current: keyof BookSections | undefined
+  for (const line of (body ?? "").split("\n")) {
+    const heading = line.match(/^##\s+(.+)$/)
+    if (heading) {
+      current = HEADING_TO_SECTION[heading[1].trim().toLowerCase()]
+      continue
+    }
+
+    const item = line.trim().replace(/^[-*]\s+/, "")
+    if (current && item) sections[current].push(item)
+  }
+
+  return sections
+}
+
 export async function getLatestNow(): Promise<NowEntry | undefined> {
   const entries = await getCollection("now")
   return entries.reduce<NowEntry | undefined>(

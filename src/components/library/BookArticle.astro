@@ -1,0 +1,183 @@
+---
+import { Image } from "astro:assets"
+import type { BookEntry } from "@/lib/content"
+import { parseBookSections } from "@/lib/content"
+import BookSection from "@/components/library/BookSection.astro"
+import { formatDate, renderInline } from "@/lib/utils"
+
+type Props = {
+  book: BookEntry
+}
+
+const { book } = Astro.props
+const { title, author, cover, description, tags, finished } = book.data
+const rating = book.data.status === "finished" ? book.data.rating : undefined
+const sections = parseBookSections(book.body)
+---
+
+<article>
+  <header>
+    <Image
+      src={cover}
+      alt={`${title} cover`}
+      width={320}
+      densities={[1, 2, 3]}
+      priority
+    />
+    <div>
+      <h1>{title}</h1>
+      <book-author>{author}</book-author>
+      <book-meta-line>
+        {rating !== undefined && (
+          <book-rating role="img" aria-label={`Rated ${rating} out of 5`}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <span aria-hidden="true" data-filled={i < rating || undefined} />
+            ))}
+          </book-rating>
+        )}
+        <book-dates>
+          {finished && <span>Read: {formatDate(finished)}</span>}
+        </book-dates>
+      </book-meta-line>
+      {tags && tags.length > 0 && (
+        <book-tags>
+          {tags.map((tag) => (
+            <span>{tag}</span>
+          ))}
+        </book-tags>
+      )}
+    </div>
+  </header>
+
+  <section>
+    <h2>TL;DR</h2>
+    <book-description set:html={renderInline(description)} />
+  </section>
+
+  <BookSection
+    title="Key takeaways"
+    items={sections.keyTakeaways}
+    emptyText="No key takeaways available yet."
+  />
+
+  <BookSection
+    title="Highlights"
+    items={sections.highlights}
+    emptyText="No highlights available yet."
+  />
+
+  <BookSection
+    title="Referenced in"
+    items={sections.referencedIn}
+    emptyText="Not referenced anywhere yet."
+    as="paragraphs"
+  />
+</article>
+
+<style>
+  header {
+    display: grid;
+    grid-template-columns: calc(
+        4 * var(--content-column-width) + 3 * var(--grid-gutter)
+      ) 1fr;
+    gap: var(--space-m);
+    margin-block-end: var(--space-xl);
+
+    @media (width < 40rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  img {
+    inline-size: 100%;
+    block-size: auto;
+    margin-block-start: calc(0.5 * var(--leading-offset));
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  h1 {
+    font-size: var(--step-3);
+    line-height: calc(var(--leading-offset) + 1em);
+    font-weight: var(--font-weight-medium);
+  }
+
+  book-author {
+    display: block;
+    margin-block-start: var(--space-xs);
+    font-size: var(--step-0);
+    color: var(--foreground);
+  }
+
+  book-meta-line {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-xs);
+    font-size: var(--step-0);
+    color: var(--foreground);
+  }
+
+  book-dates {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  book-description {
+    display: block;
+    font-size: var(--step-0);
+    color: var(--prose-foreground);
+  }
+
+  book-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+
+    span {
+      inline-size: 0.5rem;
+      block-size: 0.5rem;
+      border-radius: var(--radius-xs);
+      background-color: var(--border);
+
+      &[data-filled] {
+        background-color: var(--foreground);
+      }
+    }
+  }
+
+  book-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    margin-block-start: var(--space-xs);
+    font-size: var(--step--1);
+
+    span {
+      white-space: nowrap;
+      padding: 0.2em 0.6em;
+      color: var(--muted-foreground);
+      background-color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    @media (width < 40rem) {
+      span:nth-child(n + 3) {
+        display: none;
+      }
+    }
+  }
+
+  section {
+    margin-block-end: var(--space-xl);
+  }
+
+  section h2 {
+    font-size: var(--step-1);
+    font-weight: var(--font-weight-medium);
+    margin-block-end: var(--space-s);
+  }
+</style>

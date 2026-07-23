@@ -1,0 +1,20 @@
+---
+import MetaBook from "@/components/MetaBook.astro"
+import ScrollToTop from "@/components/ScrollToTop.astro"
+import BookArticle from "@/components/library/BookArticle.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getBookPagePaths, type BookEntry } from "@/lib/content"
+
+export async function getStaticPaths() {
+  return getBookPagePaths()
+}
+
+const { book } = Astro.props as { book: BookEntry }
+---
+
+<Layout>
+  <MetaBook slot="head" book={book} />
+  <ScrollToTop slot="actions" />
+  <ScrollToTop floating />
+  <BookArticle book={book} />
+</Layout>
