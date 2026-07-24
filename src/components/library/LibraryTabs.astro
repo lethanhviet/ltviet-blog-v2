@@ -61,8 +61,11 @@ const { tabs, variant = "underline" } = Astro.props
     }
   }
 
-  [role="tablist"][data-variant="underline"] [role="tab"] {
+  [data-hover-dim] [role="tab"] {
     color: var(--foreground);
+  }
+
+  [role="tab"][data-hover-dim-item] {
     opacity: 0.4;
 
     &[aria-selected="true"] {
@@ -71,13 +74,7 @@ const { tabs, variant = "underline" } = Astro.props
   }
 
   @media (hover: hover) {
-    [role="tablist"][data-variant="underline"][data-hover-dim]:hover
-      [role="tab"][aria-selected="true"] {
-      opacity: 1;
-    }
-
-    [role="tablist"][data-variant="underline"]
-      [role="tab"][data-hover-dim-item]:hover {
+    [data-hover-dim]:hover [role="tab"][aria-selected="true"] {
       opacity: 1;
     }
   }
