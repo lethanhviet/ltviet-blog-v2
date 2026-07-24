@@ -20,6 +20,7 @@ const { tabs, variant = "underline" } = Astro.props
         aria-selected={i === 0}
         data-tab={tab.id}
         data-hover-dim-item={variant === "underline" ? true : undefined}
+        data-pill={variant === "pill" ? true : undefined}
       >
         {tab.label}
       </button>
@@ -44,8 +45,17 @@ const { tabs, variant = "underline" } = Astro.props
   }
 
   [role="tab"] {
-    appearance: none;
     flex-shrink: 0;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 2px 0 var(--ring);
+    }
+  }
+
+  [role="tablist"][data-variant="underline"] [role="tab"] {
+    appearance: none;
     padding-block: var(--space-2xs);
     font-size: var(--step-0);
     font-weight: var(--font-weight-medium);
@@ -53,12 +63,6 @@ const { tabs, variant = "underline" } = Astro.props
     background-color: transparent;
     border: none;
     border-radius: 0;
-    cursor: pointer;
-
-    &:focus-visible {
-      outline: none;
-      box-shadow: inset 0 2px 0 var(--ring);
-    }
   }
 
   [data-hover-dim] [role="tab"] {
@@ -84,24 +88,6 @@ const { tabs, variant = "underline" } = Astro.props
     gap: var(--space-3xs);
     border-block-end: none;
     margin-block-end: var(--space-s);
-
-    [role="tab"] {
-      padding: var(--space-3xs) var(--space-xs);
-      font-size: var(--step--1);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-
-      &:hover {
-        color: var(--foreground);
-        background-color: var(--muted);
-      }
-
-      &[aria-selected="true"] {
-        color: var(--primary-foreground);
-        background-color: var(--primary);
-        border-color: var(--primary);
-      }
-    }
   }
 </style>
 

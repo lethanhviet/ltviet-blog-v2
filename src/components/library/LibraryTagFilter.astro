@@ -15,9 +15,11 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
     aria-label="Filter books by tag"
     hidden={tags.length === 0}
   >
-    <button type="button" data-filter-tag="all" aria-pressed="true">All</button>
+    <button type="button" data-filter-tag="all" data-pill aria-pressed="true">
+      All
+    </button>
     {tags.map((tag) => (
-      <button type="button" data-filter-tag={tag} aria-pressed="false">
+      <button type="button" data-filter-tag={tag} data-pill aria-pressed="false">
         {tag}
       </button>
     ))}
@@ -35,27 +37,6 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
     flex-wrap: wrap;
     gap: var(--space-3xs);
     margin-block-end: var(--space-s);
-
-    button {
-      appearance: none;
-      padding: 0.2em 0.6em;
-      font-size: var(--step--1);
-      color: var(--muted-foreground);
-      background-color: transparent;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-
-      &:hover {
-        color: var(--foreground);
-      }
-
-      &[aria-pressed="true"] {
-        color: var(--foreground);
-        background-color: var(--muted);
-        border-color: var(--muted-foreground);
-      }
-    }
   }
 </style>
 
