@@ -13,7 +13,7 @@ const { title, tags = [] } = post.data
 const [tag] = tags
 ---
 
-<li class="writing-row">
+<li class="writing-row" data-hover-dim-item>
   <a href={writingPath(post.id)}>
     <span class="writing-row__year">{showYear && year}</span>
     <span class="writing-row__title">{title}</span>
