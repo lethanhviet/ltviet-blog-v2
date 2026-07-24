@@ -1,0 +1,28 @@
+---
+import BookshelfCatalog from "@/components/bookshelf/BookshelfCatalog.astro"
+import BookshelfIntro from "@/components/bookshelf/BookshelfIntro.astro"
+import MetaPage from "@/components/MetaPage.astro"
+import Layout from "@/layouts/Layout.astro"
+import { getBookshelfBooks } from "@/lib/content"
+
+const bookshelf = await getBookshelfBooks()
+
+const totalFinishedBooks = bookshelf.years.reduce(
+  (sum, [, books]) => sum + books.length,
+  0,
+)
+const totalYears = bookshelf.years.length
+---
+
+<Layout>
+  <MetaPage
+    slot="head"
+    title="Bookshelf"
+    description="Too many books, too little time..."
+  />
+  <BookshelfIntro
+    totalFinishedBooks={totalFinishedBooks}
+    totalYears={totalYears}
+  />
+  <BookshelfCatalog bookshelf={bookshelf} />
+</Layout>

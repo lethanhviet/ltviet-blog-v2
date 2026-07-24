@@ -4,7 +4,7 @@ import Cosmos from "@/assets/icons/cosmos.svg"
 import Email from "@/assets/icons/email.svg"
 import Home from "@/assets/icons/home.svg"
 import Instagram from "@/assets/icons/instagram.svg"
-import Library from "@/assets/icons/library.svg"
+import Bookshelf from "@/assets/icons/library.svg"
 import RSS from "@/assets/icons/rss.svg"
 import Writing from "@/assets/icons/writing.svg"
 
@@ -42,9 +42,9 @@ export const NAV_GROUPS = [
       { href: "/writing", label: "Writing", icon: Writing },
       { href: "/now", label: "Now", icon: Clock },
       {
-        href: "/library",
-        label: "Library",
-        icon: Library,
+        href: "/bookshelf",
+        label: "Bookshelf",
+        icon: Bookshelf,
         activePrefixes: ["/books"],
       },
     ],

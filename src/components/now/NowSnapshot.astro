@@ -1,7 +1,7 @@
 ---
 import Briefcase from "@/assets/icons/briefcase.svg"
 import Heart from "@/assets/icons/heart.svg"
-import Library from "@/assets/icons/library.svg"
+import Bookshelf from "@/assets/icons/library.svg"
 import Plane from "@/assets/icons/plane.svg"
 import NowSection from "@/components/now/NowSection.astro"
 import type { NowSnapshot } from "@/lib/content"
@@ -21,7 +21,7 @@ const { snapshot } = Astro.props
 
 const sections = [
   { id: "work", label: "Work", icon: Briefcase },
-  { id: "read", label: "Reading", icon: Library },
+  { id: "read", label: "Reading", icon: Bookshelf },
   { id: "interest", label: "Interests", icon: Heart },
   { id: "travel", label: "Travel", icon: Plane },
 ] as const satisfies readonly Section[]

@@ -13,7 +13,7 @@ const avgRating = books.length
   : "0.0"
 ---
 
-<library-stats>
+<bookshelf-stats>
   <div>
     <span data-value>{books.length}</span>
     <span data-label>Books</span>
@@ -26,10 +26,10 @@ const avgRating = books.length
     <span data-value>{avgRating}</span>
     <span data-label>Avg Rating</span>
   </div>
-</library-stats>
+</bookshelf-stats>
 
 <style>
-  library-stats {
+  bookshelf-stats {
     display: flex;
     margin-block-end: var(--space-m);
     border: 1px solid var(--border);

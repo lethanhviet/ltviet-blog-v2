@@ -18,6 +18,9 @@ export default defineConfig({
   build: {
     inlineStylesheets: "always",
   },
+  redirects: {
+    "/library": "/bookshelf",
+  },
   integrations: [
     sitemap({
       filter: (page) =>
