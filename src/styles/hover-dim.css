@@ -1,6 +1,6 @@
 /* Shared "spotlight" hover: hovering the group dims siblings, the
-   hovered item stays at full opacity. Used by the sidebar nav and the
-   writing list. */
+   hovered item stays at full opacity. Used by the sidebar nav, the
+   writing list, and the book list. */
 [data-hover-dim-item] {
   transition: opacity 0.2s ease;
 }
