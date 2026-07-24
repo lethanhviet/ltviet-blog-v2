@@ -1,0 +1,24 @@
+/* Shared pill filter/tab button style. Used by the library year tabs and
+   tag filter so both share the same hover and selected effect. */
+[data-pill] {
+  appearance: none;
+  padding: var(--space-3xs) var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--muted-foreground);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--foreground);
+    background-color: var(--muted);
+  }
+
+  &[aria-selected="true"],
+  &[aria-pressed="true"] {
+    color: var(--primary-foreground);
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+}
