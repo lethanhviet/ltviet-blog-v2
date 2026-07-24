@@ -1,0 +1,16 @@
+/* Shared "spotlight" hover: hovering the group dims siblings, the
+   hovered item stays at full opacity. Used by the sidebar nav and the
+   writing list. */
+[data-hover-dim-item] {
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  [data-hover-dim]:hover [data-hover-dim-item] {
+    opacity: 0.4;
+  }
+
+  [data-hover-dim]:hover [data-hover-dim-item]:hover {
+    opacity: 1;
+  }
+}

@@ -37,7 +37,7 @@ const isActive = ({ external, href, activePrefixes }: NavItem) => {
       <Logo />
       <span>{SITE.title}</span>
     </a>
-    <nav id="primary-navigation" aria-label="Primary navigation">
+    <nav id="primary-navigation" aria-label="Primary navigation" data-hover-dim>
       {NAV_GROUPS.map((group) => (
         <section class="nav-group" aria-label={group.label}>
           {group.label && <h2>{group.label}</h2>}
@@ -49,6 +49,7 @@ const isActive = ({ external, href, activePrefixes }: NavItem) => {
                   aria-current={isActive(item) ? "page" : undefined}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noopener noreferrer" : undefined}
+                  data-hover-dim-item
                 >
                   <item.icon aria-hidden="true" />
                   <span>{item.label}</span>
@@ -198,8 +199,9 @@ const isActive = ({ external, href, activePrefixes }: NavItem) => {
     padding: var(--space-3xs) var(--space-2xs);
     border-radius: var(--radius-md);
     font-size: var(--step-0);
-    color: var(--muted-foreground);
+    color: var(--foreground);
     text-decoration-line: none;
+    opacity: 0.4;
 
     > svg:first-child {
       flex-shrink: 0;
@@ -212,10 +214,14 @@ const isActive = ({ external, href, activePrefixes }: NavItem) => {
       min-width: 0;
     }
 
-    &:hover,
     &[aria-current="page"] {
-      color: var(--foreground);
-      background-color: var(--muted);
+      opacity: 1;
+    }
+  }
+
+  @media (hover: hover) {
+    nav:hover a[aria-current="page"] {
+      opacity: 1;
     }
   }
 
