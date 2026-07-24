@@ -21,7 +21,7 @@ const {
 } = Astro.props
 ---
 
-<ul>
+<ul data-hover-dim>
   {books.map((book, i) => (
     <BookCard
       book={book}
@@ -38,6 +38,5 @@ const {
   ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xs);
   }
 </style>

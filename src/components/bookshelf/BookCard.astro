@@ -28,7 +28,7 @@ const rating = book.data.status === "finished" ? book.data.rating : undefined
   data-tags={filterable ? JSON.stringify(tags ?? []) : undefined}
   data-has-description={showDescription || undefined}
 >
-  <a href={bookPath(book.id)}>
+  <a href={bookPath(book.id)} data-hover-dim-item>
     <Image
       src={cover}
       alt={`${title} cover`}
@@ -66,6 +66,11 @@ const rating = book.data.status === "finished" ? book.data.rating : undefined
 <style>
   li {
     display: block;
+    border-bottom: 1px solid var(--border);
+  }
+
+  li:last-child {
+    border-bottom: none;
   }
 
   a {
@@ -78,14 +83,7 @@ const rating = book.data.status === "finished" ? book.data.rating : undefined
     column-gap: var(--space-s);
     row-gap: var(--space-3xs);
     padding: var(--space-xs) var(--space-s);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
     text-decoration-line: none;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: var(--muted);
-    }
 
     @media (width < 40rem) {
       grid-template-columns: var(--content-column-width-sm) minmax(0, 1fr) max-content;
