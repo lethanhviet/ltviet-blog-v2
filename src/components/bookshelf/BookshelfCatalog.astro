@@ -1,15 +1,15 @@
 ---
-import BookList from "@/components/library/BookList.astro"
-import LibraryStats from "@/components/library/LibraryStats.astro"
-import LibraryTabs from "@/components/library/LibraryTabs.astro"
-import LibraryTagFilter from "@/components/library/LibraryTagFilter.astro"
-import type { LibraryBooks } from "@/lib/content"
+import BookList from "@/components/bookshelf/BookList.astro"
+import BookshelfStats from "@/components/bookshelf/BookshelfStats.astro"
+import BookshelfTabs from "@/components/bookshelf/BookshelfTabs.astro"
+import BookshelfTagFilter from "@/components/bookshelf/BookshelfTagFilter.astro"
+import type { BookshelfBooks } from "@/lib/content"
 
 type Props = {
-  library: LibraryBooks
+  bookshelf: BookshelfBooks
 }
 
-const { library } = Astro.props
+const { bookshelf } = Astro.props
 
 const tabs = [
   { id: "favorites", label: "Favorites" },
@@ -19,17 +19,17 @@ const tabs = [
   { id: "dnf", label: "DNF" },
 ]
 
-const yearTabs = library.years.map(([year, books]) => ({
+const yearTabs = bookshelf.years.map(([year, books]) => ({
   id: `year-${year}`,
   label: `${year} (${books.length})`,
 }))
 ---
 
-<section aria-label="Library catalog">
-  <LibraryTabs tabs={tabs}>
+<section aria-label="Bookshelf catalog">
+  <BookshelfTabs tabs={tabs}>
     <div role="tabpanel" id="panel-favorites" aria-labelledby="tab-favorites">
       <BookList
-        books={library.favorites}
+        books={bookshelf.favorites}
         showDescription
         firstImageLoading="eager"
       />
@@ -40,7 +40,7 @@ const yearTabs = library.years.map(([year, books]) => ({
       aria-labelledby="tab-reading"
       hidden
     >
-      <BookList books={library.reading} showTags />
+      <BookList books={bookshelf.reading} showTags />
     </div>
     <div
       role="tabpanel"
@@ -48,21 +48,21 @@ const yearTabs = library.years.map(([year, books]) => ({
       aria-labelledby="tab-finished"
       hidden
     >
-      <LibraryTabs tabs={yearTabs} variant="pill">
-        {library.years.map(([year, books], i) => (
+      <BookshelfTabs tabs={yearTabs} variant="pill">
+        {bookshelf.years.map(([year, books], i) => (
           <div
             role="tabpanel"
             id={`panel-year-${year}`}
             aria-labelledby={`tab-year-${year}`}
             hidden={i > 0}
           >
-            <LibraryStats books={books} />
-            <LibraryTagFilter books={books}>
+            <BookshelfStats books={books} />
+            <BookshelfTagFilter books={books}>
               <BookList books={books} showRating filterable />
-            </LibraryTagFilter>
+            </BookshelfTagFilter>
           </div>
         ))}
-      </LibraryTabs>
+      </BookshelfTabs>
     </div>
     <div
       role="tabpanel"
@@ -70,10 +70,10 @@ const yearTabs = library.years.map(([year, books]) => ({
       aria-labelledby="tab-bucketlist"
       hidden
     >
-      <BookList books={library.bucketlist} showTags />
+      <BookList books={bookshelf.bucketlist} showTags />
     </div>
     <div role="tabpanel" id="panel-dnf" aria-labelledby="tab-dnf" hidden>
-      <BookList books={library.dnf} showTags />
+      <BookList books={bookshelf.dnf} showTags />
     </div>
-  </LibraryTabs>
+  </BookshelfTabs>
 </section>

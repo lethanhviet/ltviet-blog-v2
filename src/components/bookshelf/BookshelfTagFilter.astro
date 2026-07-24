@@ -8,7 +8,7 @@ const { books } = Astro.props
 const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
 ---
 
-<library-tag-filter>
+<bookshelf-tag-filter>
   <div
     data-filters
     role="group"
@@ -25,10 +25,10 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
     ))}
   </div>
   <slot />
-</library-tag-filter>
+</bookshelf-tag-filter>
 
 <style>
-  library-tag-filter {
+  bookshelf-tag-filter {
     display: block;
   }
 
@@ -41,7 +41,7 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
 </style>
 
 <script>
-  class LibraryTagFilter extends HTMLElement {
+  class BookshelfTagFilter extends HTMLElement {
     private controller?: AbortController
 
     connectedCallback() {
@@ -80,7 +80,7 @@ const tags = [...new Set(books.flatMap((book) => book.data.tags ?? []))].sort()
     }
   }
 
-  if (!customElements.get("library-tag-filter")) {
-    customElements.define("library-tag-filter", LibraryTagFilter)
+  if (!customElements.get("bookshelf-tag-filter")) {
+    customElements.define("bookshelf-tag-filter", BookshelfTagFilter)
   }
 </script>

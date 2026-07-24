@@ -79,7 +79,7 @@ export async function getTags(): Promise<Map<string, WritingEntry[]>> {
 const byTitle = (a: BookEntry, b: BookEntry) =>
   a.data.title.localeCompare(b.data.title)
 
-export type LibraryBooks = {
+export type BookshelfBooks = {
   favorites: BookEntry[]
   reading: BookEntry[]
   bucketlist: BookEntry[]
@@ -87,7 +87,7 @@ export type LibraryBooks = {
   dnf: BookEntry[]
 }
 
-export async function getLibraryBooks(): Promise<LibraryBooks> {
+export async function getBookshelfBooks(): Promise<BookshelfBooks> {
   const books = await getCollection("books")
 
   const favorites = books

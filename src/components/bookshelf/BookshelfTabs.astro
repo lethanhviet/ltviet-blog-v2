@@ -5,7 +5,7 @@ type Props = { tabs: Tab[]; variant?: "underline" | "pill" }
 const { tabs, variant = "underline" } = Astro.props
 ---
 
-<library-tabs>
+<bookshelf-tabs>
   <div
     role="tablist"
     data-variant={variant}
@@ -27,7 +27,7 @@ const { tabs, variant = "underline" } = Astro.props
     ))}
   </div>
   <slot />
-</library-tabs>
+</bookshelf-tabs>
 
 <style>
   [role="tablist"] {
@@ -92,7 +92,7 @@ const { tabs, variant = "underline" } = Astro.props
 </style>
 
 <script>
-  class LibraryTabs extends HTMLElement {
+  class BookshelfTabs extends HTMLElement {
     private controller?: AbortController
 
     connectedCallback() {
@@ -153,7 +153,7 @@ const { tabs, variant = "underline" } = Astro.props
     }
   }
 
-  if (!customElements.get("library-tabs")) {
-    customElements.define("library-tabs", LibraryTabs)
+  if (!customElements.get("bookshelf-tabs")) {
+    customElements.define("bookshelf-tabs", BookshelfTabs)
   }
 </script>

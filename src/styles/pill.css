@@ -1,4 +1,4 @@
-/* Shared pill filter/tab button style. Used by the library year tabs and
+/* Shared pill filter/tab button style. Used by the bookshelf year tabs and
    tag filter so both share the same hover and selected effect. */
 [data-pill] {
   appearance: none;
